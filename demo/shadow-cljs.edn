@@ -1,0 +1,14 @@
+{:cache-root ".shadow-cljs",
+ :verbose false,
+ :lein false,
+ ;:dev-http {8000 {:handler webly.app.app/ring-handler}},
+ :http {:port 8001, :host "0.0.0.0"},
+ :nrepl {:port 8002},
+ :deps true ;; Enables deps.edn integration
+ :builds {:app {:target :browser,
+                :output-dir ".cljs/public",
+                :asset-path "/r",
+                :modules {:main {:entries [flowy.client],
+                                 :depends-on #{}}}
+                :compiler-options {:optimizations :simple,
+                                   :output-feature-set :es8}}}}

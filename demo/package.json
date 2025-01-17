@@ -1,0 +1,15 @@
+{
+  "name": "my-clojurescript-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx shadow-cljs watch app",
+    "build": "npx shadow-cljs compile app"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.20.2"
+  }
+}
