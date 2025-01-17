@@ -8,7 +8,11 @@
  :builds {:app {:target :browser,
                 :output-dir ".cljs/public",
                 :asset-path "/r",
-                :modules {:main {:entries [flowy.client],
-                                 :depends-on #{}}}
+                :modules {:main {:entries [flowy.client
+                                           demo.longdon
+                                           ],
+                                 :depends-on #{}
+                                 :init-fn demo.longdon/start
+                                 }}
                 :compiler-options {:optimizations :simple,
                                    :output-feature-set :es8}}}}

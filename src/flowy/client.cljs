@@ -1,5 +1,6 @@
 (ns flowy.client
   (:require 
+   [clojure.string :as str]
    [missionary.core :as m]
    [flowy.cljs-target :refer [do-browser]]
    [flowy.encode :as io])
@@ -10,15 +11,21 @@
 (do-browser
   (defn server-url []
     (let [url (new js/URL (.-location js/window))
-          proto (.-protocol url)]
-      (set! (.-protocol url)
-        (case proto
-          "http:" "ws:"
-          "https:" "wss:"
-          (throw (ex-info "Unexpected protocol" proto))))
-      (.. url -searchParams (set "ELECTRIC_USER_VERSION" ELECTRIC_USER_VERSION))
-      (set! (.-hash url) "") ; fragment is forbidden in WS URL https://websockets.spec.whatwg.org/#ref-for-dom-websocket-websocket%E2%91%A0
-      (.toString url))))
+          proto (.-protocol url)
+          _ (set! (.-protocol url)
+                  (case proto
+                    "http:" "ws:"
+                    "https:" "wss:"
+                    (throw (ex-info "Unexpected protocol" proto))))
+          ;_ (.. url -searchParams (set "ELECTRIC_USER_VERSION" ELECTRIC_USER_VERSION))
+          _ (set! (.-hash url) "") ; fragment is forbidden in WS URL https://websockets.spec.whatwg.org/#ref-for-dom-websocket-websocket%E2%91%A0
+          url-s (.toString url)
+          url-s (str url-s "ws")
+          ]
+      (println "server-ws-url: " url-s)
+      ; ws://localhost:9000/?ELECTRIC_USER_VERSION=hyperfiddle_electric_client__dirty
+      url-s
+      )))
 
 (def ^:dynamic *ws-server-url* (do-browser (server-url)))
 

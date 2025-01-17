@@ -2,7 +2,7 @@
 
 
 cd demo
-
+npm run build
 clj -M:app
 
 bb client
