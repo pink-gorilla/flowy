@@ -2,7 +2,7 @@
 
 
 cd demo
-npm run build
+npm run build or npm run release  perhaps npm run report
 clj -M:app
 
 bb client

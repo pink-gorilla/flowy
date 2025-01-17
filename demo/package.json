@@ -1,9 +1,12 @@
 {
-  "name": "my-clojurescript-app",
+  "name": "flowy-demo",
   "version": "1.0.0",
   "scripts": {
     "start": "npx shadow-cljs watch app",
-    "build": "npx shadow-cljs compile app"
+    "build": "npx shadow-cljs compile app",
+    "release": "npx shadow-cljs release app-prod",
+    "report": "npx shadow-cljs run shadow.cljs.build-report app-prod .cljs/public/report.html"
+    
   },
   "dependencies": {
     "react": "^18.2.0",

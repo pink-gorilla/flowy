@@ -13,4 +13,22 @@
                                  :init-fn demo.longdon/start
                                  }}
                 :compiler-options {:optimizations :simple,
-                                   :output-feature-set :es8}}}}
+                                   :output-feature-set :es8}}
+          :app-prod {:target :browser,
+                :output-dir ".cljs/public",
+                :asset-path "/r",
+                :modules {:main {:entries [demo.longdon],
+                                 :depends-on #{}
+                                 :init-fn demo.longdon/start}}
+                :compiler-options {:optimizations :advanced
+                                   :output-feature-set :es8}
+                :report     true}
+          
+          
+          }}
+
+
+
+
+ :shadow-mode :release ; production build - no source maps
+:advanced true
