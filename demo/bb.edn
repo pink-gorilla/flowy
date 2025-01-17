@@ -1,0 +1,11 @@
+{:deps {http-kit/http-kit {:mvn/version "2.8.0"}}
+ :paths ["bb"]
+ :tasks
+ {:requires ([org.httpkit.client :as http]
+             [bclient :as b]
+             )
+  client {:doc "Run the WebSocket client"
+          :task (b/start-client)}}}
+
+
+ 

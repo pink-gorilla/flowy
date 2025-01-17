@@ -1,0 +1,9 @@
+{:deps {org.pinkgorilla/flowy {:local/root ".." :deps/manifest :deps}}
+:aliases
+{:app
+ {:main-opts ["-m" "app"]} 
+ 
+ 
+ }
+
+}
