@@ -8,9 +8,7 @@
  :builds {:app {:target :browser,
                 :output-dir ".cljs/public",
                 :asset-path "/r",
-                :modules {:main {:entries [flowy.client
-                                           demo.longdon
-                                           ],
+                :modules {:main {:entries [demo.longdon],
                                  :depends-on #{}
                                  :init-fn demo.longdon/start
                                  }}
