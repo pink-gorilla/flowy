@@ -52,8 +52,6 @@
     ; return the service state
     this))
 
-
-
 (defn call-fn [{:keys [sfn farg] :as service}  
                {:keys [args]
                 :or {args []}
@@ -63,7 +61,6 @@
                (concat [farg] args)
                args)]
     (apply sfn args)))
-
 
 
 (defn exec-clj [{:keys [services] :as this} {:keys [fun] :as clj-call}]

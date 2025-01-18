@@ -10,10 +10,10 @@
    [ring.websocket :as ws]
    [flowy.ring-adapter :refer [ring-ws-handler wrap-electric-websocket]]
    [flowy.executor :as exec]
+   [flowy.jetty-config :refer [jetty-configurator]]
    )
   (:import
-   (org.eclipse.jetty.server.handler.gzip GzipHandler)
-   (org.eclipse.jetty.websocket.server.config JettyWebSocketServletContainerInitializer JettyWebSocketServletContainerInitializer$Configurator)
+  
    [missionary Cancelled]))
 
 
@@ -98,41 +98,15 @@
      {:not-found (constantly {:status 404 :body "Not found"})}))))
 
 
-(defn- add-gzip-handler!
-  "Makes Jetty server compress responses. Optional but recommended."
-  [server]
-  (.setHandler server
-               (doto (GzipHandler.)
-                 #_(.setIncludedMimeTypes (into-array ["text/css" "text/plain" "text/javascript" "application/javascript" "application/json" "image/svg+xml"])) ; only compress these
-                 (.setMinGzipSize 1024)
-                 (.setHandler (.getHandler server)))))
-
-(defn- configure-websocket!
-  "Tune Jetty Websocket config for Electric compat." [server]
-  (JettyWebSocketServletContainerInitializer/configure
-   (.getHandler server)
-   (reify JettyWebSocketServletContainerInitializer$Configurator
-     (accept [_this _servletContext wsContainer]
-       (.setIdleTimeout wsContainer (java.time.Duration/ofSeconds 60))
-       (.setMaxBinaryMessageSize wsContainer (* 100 1024 1024)) ; 100M - temporary
-       (.setMaxTextMessageSize wsContainer (* 100 1024 1024))   ; 100M - temporary
-       ))))
-
 ;; Run Jetty server
 (defn -main [& args]
   (let [port 9000
         exs (exec/start-executor {:services [{:fun 'demo.fortune-cookie/get-cookie}
                                              {:fun 'demo.calculator/add}
-                                             {:fun 'demo.calculator/subtract}
-                                             
-                                             ]})
-        
-        ]
+                                             {:fun 'demo.calculator/subtract}]})]
     (println "demo cookie: " (exec/exec-clj exs {:fun 'demo.fortune-cookie/get-cookie}))
     (println (str "Starting server on http://localhost:" port))
     (run-jetty handler {:join? false
                         :port port
                         :ip "0.0.0.0"
-                        :configurator (fn [server]
-                                        (configure-websocket! server)
-                                        (add-gzip-handler! server))})))
+                        :configurator jetty-configurator})))
