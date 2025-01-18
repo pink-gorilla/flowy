@@ -8,12 +8,10 @@
    [ring.middleware.not-modified :refer [wrap-not-modified]]
    [ring.util.response :as response]
    [ring.websocket :as ws]
-   [flowy.ring-adapter :refer [ring-ws-handler wrap-electric-websocket]]
+   [flowy.ring-adapter :refer [ring-ws-handler wrap-electric-websocket handler-ws]]
    [flowy.executor :as exec]
-   [flowy.jetty-config :refer [jetty-configurator]]
-   )
+   [flowy.jetty-config :refer [jetty-configurator]])
   (:import
-  
    [missionary Cancelled]))
 
 
@@ -31,10 +29,10 @@
   (println "flomaysta received: " msg))
 
 (defn flowmaysta
-  ([a]
+  ([ring-req]
     ;(println "flomaysta: a")
     ;(println "a: " a)
-   (println "FLOMAYSTA INIT FROM A NEW RING REQ.")
+   (println "FLOMAYSTA INIT FROM A NEW RING REQ: " ring-req)
     ;
    (fn [write read]
       ;(println "write: " write)
@@ -58,32 +56,20 @@
             (println "flomaysta shutting down..")
              ;(m/? shutdown!)
             true))))))
-  ([write ?read]
+  #_([write ?read]
    ;(rec write ?read pst)
    (println "flomaysta 1")
    (m/seed ["a" "b" "c" "d"]))
-  ([write ?read on-error]
+  #_([write ?read on-error]
    (println "flomaysta 2")
    (m/seed ["a" "b" "c"])))
 
-
-(defn not-found-handler [_ring-request]
-  (-> (response/not-found "Not found")
-      (response/content-type "text/plain")))
-
-(def handler-ws
-  (-> not-found-handler
-      (wrap-electric-websocket flowmaysta)))
-
-
-
-
-(def handler
+(defn make-handler [system]
   (ring/ring-handler
    (ring/router
     [["/" {:handler (fn [_]
                       (response/resource-response "public/index.html"))}]
-     ["/ws" {:handler handler-ws}]
+     ["/ws" {:handler (handler-ws system)}]
      ["/r/*" (ring/create-resource-handler)]
      ;["/r/*" (ring/create-resource-handler {:path "public" :root "/r/"})]
      ]
@@ -103,10 +89,13 @@
   (let [port 9000
         exs (exec/start-executor {:services [{:fun 'demo.fortune-cookie/get-cookie}
                                              {:fun 'demo.calculator/add}
-                                             {:fun 'demo.calculator/subtract}]})]
+                                             {:fun 'demo.calculator/subtract}]})
+        h (make-handler flowmaysta)
+        ]
     (println "demo cookie: " (exec/exec-clj exs {:fun 'demo.fortune-cookie/get-cookie}))
+
     (println (str "Starting server on http://localhost:" port))
-    (run-jetty handler {:join? false
+    (run-jetty h {:join? false
                         :port port
                         :ip "0.0.0.0"
                         :configurator jetty-configurator})))

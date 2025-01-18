@@ -6,6 +6,7 @@
   (:refer-clojure :exclude [send])
   (:require [clojure.tools.logging :as log]
             [missionary.core :as m]
+            [ring.util.response :as response]
             [ring.websocket :as ws]
             [flowy.encode :as io]
             )
@@ -280,3 +281,12 @@
            (= client-version user-version) (next-handler ring-request)
            :else                           (on-missmatch ring-request client-version user-version)))
        (next-handler ring-request)))))
+
+
+(defn not-found-handler [_ring-request]
+  (-> (response/not-found "Not found")
+      (response/content-type "text/plain")))
+
+(defn handler-ws [system]
+  (-> not-found-handler
+      (wrap-electric-websocket system)))
