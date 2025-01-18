@@ -8,3 +8,8 @@ clj -M:app
 bb client
 
 you can run multiple clients.
+
+
+
+333K without transit
+402K with transit

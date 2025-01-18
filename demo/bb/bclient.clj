@@ -1,16 +1,54 @@
 
 (ns bclient
   (:require 
-   [babashka.http-client.websocket :as bws]))
+   [cognitect.transit :as transit]
+   [clojure.java.io :as io]
+   [babashka.http-client.websocket :as bws])
+   (:import 
+     (java.io ByteArrayInputStream ByteArrayOutputStream)))
+
+
+
+  (defn decode [x]
+    (let [ar (.array x)
+          _ (println "ar:" ar)
+          tjson (String. ar)
+          _ (println "str: " tjson)
+          in (io/input-stream (.getBytes tjson))
+          reader (transit/reader in :json)
+          v (transit/read reader)]
+      (println "v: " v)
+      v
+      ))
+  
+
+(defn encode [v]
+  (let [out (ByteArrayOutputStream.) ;; Use babashka.io/output-stream
+        writer (transit/writer out :json)
+        _ (transit/write writer v)
+        s (.toString out) ; (.toByteArray out)
+        ]
+    (println "Transit-JSON encoded:" s)
+    s
+    ))
+
 
 (defn on-message [message]
-  (println "Received message:" message))
+  (println "Received message:" message)
+  (println "decoded message: " (decode message))
+  )
+
+(defn send! [ws v]
+  (->> (encode v)
+       (bws/send! ws))
+  
+  )
 
 (defn on-open [ws]
   (println "WebSocket connection established.")
   ;; Send a message once connected
   ;(http/send ws "Hello, WebSocket!")
-   (bws/send! ws "Hello World!")
+   (send! ws "Hello World!")
   )
 
 
@@ -22,10 +60,13 @@
                      :on-close (fn [ws status reason]
                                  (println "WebSocket closed! status: " status "reason: " reason))
                      :on-message  (fn [ws msg last?]
-                                   (println "Received message:" msg))})]
+                                    ;(println "Received message:" msg)
+                                    (on-message msg)
+                                    
+                                    )})]
     ;; Keep the program running to keep the WebSocket connection open
     (Thread/sleep 5000)
-    (bws/send! ws "HEARTBEAT")
+    (send! ws {:a 1 :b "b" :y [1 2 3]})
     (Thread/sleep 5000)
     (bws/send! ws "HEARTBEAT")
     (Thread/sleep 5000)
@@ -33,7 +74,7 @@
     (Thread/sleep 5000)
     (bws/send! ws "HEARTBEAT")
     (Thread/sleep 5000)
-    (bws/send! ws "BONGO")
+    (send! ws "BONGO")
     (Thread/sleep 5000)
     (bws/send! ws "HEARTBEAT")
     (Thread/sleep 5000)

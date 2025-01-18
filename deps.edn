@@ -2,7 +2,10 @@
         missionary/missionary          {:mvn/version "b.42"}
         metosin/reitit-ring {:mvn/version "0.7.2"}
         ring/ring-core       {:mvn/version "1.13.0"}
-        ring/ring-jetty-adapter {:mvn/version "1.13.0"}}
+        ring/ring-jetty-adapter {:mvn/version "1.13.0"}
+        com.cognitect/transit-clj      {:mvn/version "1.0.333"}
+        com.cognitect/transit-cljs     {:mvn/version "0.8.280"}
+        }
 
 
 }
