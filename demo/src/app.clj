@@ -8,7 +8,9 @@
    [ring.middleware.not-modified :refer [wrap-not-modified]]
    [ring.util.response :as response]
    [ring.websocket :as ws]
-   [flowy.ring-adapter :refer [ring-ws-handler wrap-electric-websocket]])
+   [flowy.ring-adapter :refer [ring-ws-handler wrap-electric-websocket]]
+   [flowy.executor :as exec]
+   )
   (:import
    (org.eclipse.jetty.server.handler.gzip GzipHandler)
    (org.eclipse.jetty.websocket.server.config JettyWebSocketServletContainerInitializer JettyWebSocketServletContainerInitializer$Configurator)
@@ -64,21 +66,6 @@
    (println "flomaysta 2")
    (m/seed ["a" "b" "c"])))
 
-(defn electric-websocket-middleware
-  "Open a websocket and boot an Electric server program defined by `entrypoint`.
-  Takes:
-  - a ring handler `next-handler` to call if the request is not a websocket upgrade (e.g. the next middleware in the chain),
-  - a `config` map eventually containing {:hyperfiddle.electric/user-version <version>} to ensure client and server share the same version,
-    - see `hyperfiddle.electric-ring-adapter/wrap-reject-stale-client`
-  - an Electric `entrypoint`: a function (fn [ring-request] (e/boot-server {} my-ns/My-e-defn ring-request))
-  "
-  [next-handler entrypoint]
-  ;; Applied bottom-up
-  (-> (wrap-electric-websocket next-handler entrypoint) ; 5. connect electric client
-    ; 4. this is where you would add authentication middleware (after cookie parsing, before Electric starts)
-      ;(cookies/wrap-cookies) ; 3. makes cookies available to Electric app
-      ;(wrap-params)
-)) ; 1. parse query params
 
 (defn not-found-handler [_ring-request]
   (-> (response/not-found "Not found")
@@ -133,7 +120,15 @@
 
 ;; Run Jetty server
 (defn -main [& args]
-  (let [port 9000]
+  (let [port 9000
+        exs (exec/start-executor {:services [{:fun 'demo.fortune-cookie/get-cookie}
+                                             {:fun 'demo.calculator/add}
+                                             {:fun 'demo.calculator/subtract}
+                                             
+                                             ]})
+        
+        ]
+    (println "demo cookie: " (exec/exec-clj exs {:fun 'demo.fortune-cookie/get-cookie}))
     (println (str "Starting server on http://localhost:" port))
     (run-jetty handler {:join? false
                         :port port
