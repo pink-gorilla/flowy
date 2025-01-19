@@ -43,6 +43,7 @@
   (let [t1 (task 'demo.fortune-cookie/get-cookie)
         t2 (task 'demo.fortune-cookie/get-cookie)
         t3 (task 'demo.fortune-cookie/get-cookie)
+        t4 (task 'demo.fortune-cookie/get-cookie 5)
         ]
     (t1 #(println "task1 finished success:" %)
        #(println "task1 finished error:" %))
@@ -50,6 +51,11 @@
         #(println "task2 finished error:" %))
     (t3 #(println "task3 finished success:" %)
         #(println "task3 finished error:" %))
+    (t4 #(println "task4 (fixed) finished success:" %)
+        #(println "task4 (fixed) error:" %))
+    (t4 #(println "task4/2 (fixed) success:" %)
+        #(println "task4/2 (fixed) error:" %))
+    
     ))
 
 
