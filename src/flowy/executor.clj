@@ -62,6 +62,8 @@
                args)]
     (apply sfn args)))
 
+(defn get-service [{:keys [services] :as this} {:keys [fun] :as clj-call}]
+  (get @services fun))
 
 (defn exec-clj [{:keys [services] :as this} {:keys [fun] :as clj-call}]
   (if-let [s (get @services fun)]
