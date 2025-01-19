@@ -1,14 +1,17 @@
 (ns demo.longdon
  (:require
    [missionary.core :as m]
-   [flowy.client :refer [boot-with-retry connector]])
+   [flowy.client :refer [boot-with-retry connector]]
+   [flowy.reflower :refer [task]]
+  )
    (:import missionary.Cancelled))
 
 (defn print-val [state msg]
-  (println "longdon received: " msg))
+  (println "received: " msg))
 
 (defn longdon
    [write read]
+   ; this task gets called whenever the connection is established.
    (println "longdon init1")
    ;(println "write: " write)
    ;(println "read: " read)
@@ -19,9 +22,12 @@
                  (m/observe read))]
     (m/sp
         (try
-          (println "I am longdong!")
+          (println "longdong sp start")
                         ;(m/? (write "123"))
-          (m/? (write "longdon-init"))
+          (m/? (write {:op :exec 
+                       :id 33 
+                       :fun 'demo.fortune-cookie/get-cookie
+                       }))
           (m/?
            (m/reduce print-val 0 msg-in))
           (println "longdon DONE! success!")
@@ -33,12 +39,29 @@
             true)))))
 
 
+(defn run-task []
+  (let [t1 (task 'demo.fortune-cookie/get-cookie)
+        t2 (task 'demo.fortune-cookie/get-cookie)
+        t3 (task 'demo.fortune-cookie/get-cookie)
+        ]
+    (t1 #(println "task1 finished success:" %)
+       #(println "task1 finished error:" %))
+    (t2 #(println "task2 finished success:" %)
+        #(println "task2 finished error:" %))
+    (t3 #(println "task3 finished success:" %)
+        #(println "task3 finished error:" %))
+    ))
+
+
 
 (defn start []
-  ((boot-with-retry
+  #_((boot-with-retry
     longdon
      connector)  
    #(println "longdon finished success:" %)
    #(println "longdon finished error:" %)
-  ))
+  )
+  ; run clj task
+  (run-task)
+  )
 
