@@ -1,17 +1,10 @@
 {:paths ["src"
-         ".cljs"]
- 
+         ".cljs"] ; compiled js files.
+
  :deps {org.pinkgorilla/flowy {:local/root ".." :deps/manifest :deps}
         thheller/shadow-cljs {:mvn/version "2.28.20"}
         com.pitch/uix.core {:mvn/version "1.2.0"}
-        com.pitch/uix.dom {:mvn/version "1.2.0"}
-        
-        }
-:aliases
-{:app
- {:main-opts ["-m" "app"]} 
- 
- 
- }
-
-}
+        com.pitch/uix.dom {:mvn/version "1.2.0"}}
+ :aliases
+ {:app
+  {:main-opts ["-m" "demo.app"]}}}

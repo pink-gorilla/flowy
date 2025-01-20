@@ -8,18 +8,18 @@
  :builds {:app {:target :browser,
                 :output-dir ".cljs/public",
                 :asset-path "/r",
-                :modules {:main {:entries [demo.longdon],
+                :modules {:main {:entries [demo.app],
                                  :depends-on #{}
-                                 :init-fn demo.longdon/start
+                                 :init-fn demo.app/start
                                  }}
                 :compiler-options {:optimizations :simple,
                                    :output-feature-set :es8}}
           :app-prod {:target :browser,
                 :output-dir ".cljs/public",
                 :asset-path "/r",
-                :modules {:main {:entries [demo.longdon],
+                :modules {:main {:entries [demo.app],
                                  :depends-on #{}
-                                 :init-fn demo.longdon/start}}
+                                 :init-fn demo.app/start}}
                 :compiler-options {:optimizations :advanced
                                    :output-feature-set :es8}
                 :report     true}

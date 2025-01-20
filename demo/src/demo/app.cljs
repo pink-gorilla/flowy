@@ -59,7 +59,8 @@
 
 
 
-(defn start-app []
+(defn start []
   (let [root (uix.dom/create-root (js/document.getElementById "app"))]
     (uix.dom/render-root ($ app) root)))
+
 

@@ -1,11 +1,11 @@
-(ns flowmaysta
-  (:require 
-    [missionary.core :as m]
-   )
-   (:import
-   [missionary Cancelled])
-  )
+(ns demo.raw
+  (:require
+   [missionary.core :as m])
+  (:import
+   [missionary Cancelled]))
 
+;; do not use.
+;; just used to find out how missionary websocket works.
 
  ;((entrypoint ring-req) (comp write-msg io/encode) (fn [cb] (read-msg (comp cb io/decode)))))
 
@@ -43,8 +43,8 @@
             true))))))
   #_([write ?read]
    ;(rec write ?read pst)
-   (println "flomaysta 1")
-   (m/seed ["a" "b" "c" "d"]))
+     (println "flomaysta 1")
+     (m/seed ["a" "b" "c" "d"]))
   #_([write ?read on-error]
-   (println "flomaysta 2")
-   (m/seed ["a" "b" "c"])))
+     (println "flomaysta 2")
+     (m/seed ["a" "b" "c"])))

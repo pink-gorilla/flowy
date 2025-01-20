@@ -1,4 +1,4 @@
-(ns app
+(ns demo.app
   (:require
    [missionary.core :as m]
    [reitit.ring :as ring]
@@ -12,7 +12,7 @@
    [flowy.executor :as exec]
    [flowy.jetty-config :refer [jetty-configurator]]
    [flowy.reflower :refer [start-reflower]]
-   [flowmaysta :refer [flowmaysta]]
+   ;[demo.raw :refer [flowmaysta]]
    )
   (:import
    [missionary Cancelled]))
@@ -54,16 +54,15 @@
                                              {:fun 'demo.calculator/add}
                                              {:fun 'demo.calculator/subtract}
                                              ; ap
-                                             {:fun 'demo.counter/counter-fn :mode :ap}
-                                             ]})
+                                             {:fun 'demo.counter/counter-fn :mode :ap}]})
         rf (start-reflower exs)
         ;h (make-handler flowmaysta)
-        h (make-handler rf)
-        ]
+        h (make-handler rf)]
+    ; test of executor service
     (println "demo cookie: " (exec/exec-clj exs {:fun 'demo.fortune-cookie/get-cookie}))
-
+    ; start webserver
     (println (str "Starting server on http://localhost:" port))
     (run-jetty h {:join? false
-                        :port port
-                        :ip "0.0.0.0"
-                        :configurator jetty-configurator})))
+                  :port port
+                  :ip "0.0.0.0"
+                  :configurator jetty-configurator})))

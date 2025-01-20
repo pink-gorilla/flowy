@@ -39,12 +39,12 @@
 
 (defn use-flow 
   "a react hook 
-   input is f (the flow) and the initial-value to show in th
+   input is f (the flow) and the initial-value that gets
+   returned before the flow has returned something.
    example: (use-flow f \"waiting...\")
-   the hook returns the last value from the flow"
-  
+   the hook returns the last value from the flow" 
   [f initial-value]
-    ;;  manage subscription via hooks
+  ;;  manage subscription via hooks
   (let [x (use-memo create-flow-store [f initial-value])
         {:keys [subscribe get-snapshot]} x]
     (uix/use-sync-external-store subscribe get-snapshot)))
