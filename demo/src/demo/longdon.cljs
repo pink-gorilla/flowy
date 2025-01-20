@@ -3,6 +3,7 @@
    [missionary.core :as m]
    [flowy.client :refer [boot-with-retry connector]]
    [flowy.reflower :refer [task flow]]
+  [demo.app]
   )
    (:import missionary.Cancelled))
 
@@ -72,6 +73,7 @@
    #(println "longdon finished error:" %)
   )
   ; run clj task
+  (demo.app/start-app)
   (run-task)
   )
 

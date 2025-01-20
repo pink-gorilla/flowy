@@ -6,11 +6,10 @@
     "compile": "npx shadow-cljs compile app",
     "release": "npx shadow-cljs release app-prod",
     "report": "npx shadow-cljs run shadow.cljs.build-report app-prod .cljs/public/report.html"
-    
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "shadow-cljs": "^2.20.2"
