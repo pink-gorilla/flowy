@@ -1,9 +1,4 @@
-(ns flowy.executor
-  ;(:require 
-    ;[clojure.set :refer [select-keys]]
-   ;)
-  )
-
+(ns flowy.executor)
 
 (defn- resolve-symbol [s]
   (try
@@ -21,11 +16,10 @@
 
 (defn expose
   "exposes one function 
-   services args: this - created via clj-service.core
-                  permission-service - created via modular.permission.core/start-permissions
-   function args: service - fully qualified symbol
-                  permission - a set following modular.permission role based access
-                  fixed-args - fixed args to be passed to the function executor as the beginning arguments"
+   this - created via start-executor
+   service-opts: 
+      fun - fully qualified symbol
+      fixed - a fixed args to be passed to a stateful function which is its first parameter"
   [{:keys [services] :as this} {:keys [fun fixed] :as service-opts}]
   (println "exposing: " fun)
   (let [sfn (resolve-symbol fun)
@@ -39,9 +33,9 @@
 
 
 (defn start-executor
-  "starts the clj-service service.
-   exposes stateless services that are discovered via the extension system.
-   non stateless services need to be exposed via expose-service"
+  "starts the executor service 
+   :services - a vec of service-definition maps
+   :env - the environment that gets (entirely or modified passed to a service that is stateful)"
   [{:keys [services env]}]
   (println "starting clj-services ..")
   (let [this {:env env
