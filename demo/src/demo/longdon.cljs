@@ -2,9 +2,8 @@
  (:require
    [missionary.core :as m]
    [flowy.client :refer [boot-with-retry connector]]
-   [flowy.reflower :refer [task flow]]
-  [demo.app]
-  )
+   [flowy.reflower :refer [task flow]] 
+   [demo.app])
    (:import missionary.Cancelled))
 
 (defn print-val [state msg]
@@ -74,6 +73,6 @@
   )
   ; run clj task
   (demo.app/start-app)
-  (run-task)
+  ;(run-task)
   )
 
