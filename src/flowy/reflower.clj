@@ -72,10 +72,12 @@
                                 (add-task id dispose!))
                               (println "no task foudn for:" msg))
                             :cancel
-                            (when-let [dispose! (get @running id)]
-                              (dispose!)
-                              (remove-task id))
-                                ; else
+                            (if-let [dispose! (get @running id)]
+                              (do (println "cancelling task: " id)
+                                  (dispose!)
+                                  (remove-task id))
+                              (println "task to cancel not found: " id))
+                            ; else
                             (println "unknown op: " msg)))]
         (m/sp
          (try
