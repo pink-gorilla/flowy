@@ -20,13 +20,31 @@ Exposed functions can
 Then in the browser you deal with "proxies" of the tasks/flows in clojure
 on the server.
 
-# UIX integration
+# Reagent integration
+
+flowy.reagent/flow->ratom can be used in a reagent.core/with-let. It
+gets 2 parameters: 1. the flow and 2. the initial value, It retruns
+[flow-state-a dispose!].  The dispose! function needs to be used in the 
+finally section of the with-let. flow-state-a is a normal reagent atom.
+
+## Reagent demo
+
+```
+  cd demo
+  npm install
+  npm run compile-reagent
+  clj -M:app  
+```  
+
+Open Browser on localhost:9000
+
+# Pitch/UIX integration
 
 flowy.uix/use-flow is a react hook that returns the current value of a flow,
 its parameters are 1. the flow and 2. the initial value that should be returned
 before the flow returns something.
 
-# Demo
+## Pitch/UIX Demo
 
 ```
   cd demo
@@ -36,18 +54,17 @@ before the flow returns something.
 ```  
 
  Open Browser on localhost:9000
-
-  
-
+ 
 # Babashka Client
+
+This is an experiment to see if babashka can be used as a commandline inspection tool;
+the fast startup time makes sense. I doubt that missionary will run in babashka, but
+one can use the protocol that we designed without missionary.
 
 bb client
 
 you can run multiple clients.
 
-This is an experiment to see if babashka can be used as a commandline inspection tool;
-the fast startup time makes sense. I doubt that missionary will run in babashka, but
-one can use the protocol that we designed without missionary.
 
 # Bundlesize
 

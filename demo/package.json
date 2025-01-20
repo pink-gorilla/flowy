@@ -5,7 +5,9 @@
     "start": "npx shadow-cljs watch app",
     "compile": "npx shadow-cljs compile app",
     "release": "npx shadow-cljs release app-prod",
-    "report": "npx shadow-cljs run shadow.cljs.build-report app-prod .cljs/public/report.html"
+    "report": "npx shadow-cljs run shadow.cljs.build-report app-prod .cljs/public/report.html",
+    "compile-reagent": "npx shadow-cljs compile app-reagent",
+    "release-reagent": "npx shadow-cljs release app-reagent-prod"
   },
   "dependencies": {
     "react": "^19.0.0",

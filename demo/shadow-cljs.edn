@@ -5,7 +5,8 @@
  :http {:port 8001, :host "0.0.0.0"},
  :nrepl {:port 8002},
  :deps true ;; Enables deps.edn integration
- :builds {:app {:target :browser,
+ :builds {;; UIX BUILDS
+          :app {:target :browser,
                 :output-dir ".cljs/public",
                 :asset-path "/r",
                 :modules {:main {:entries [demo.app],
@@ -21,14 +22,29 @@
                                  :depends-on #{}
                                  :init-fn demo.app/start}}
                 :compiler-options {:optimizations :advanced
-                                   :output-feature-set :es8}
-                :report     true}
+                                   :output-feature-set :es8}}
+          
+          ;; REAGENT BUILDS
+          :app-reagent {:target :browser,
+                        :output-dir ".cljs/public",
+                        :asset-path "/r",
+                        :modules {:main {:entries [demo.appreagent],
+                                         :depends-on #{}
+                                         :init-fn demo.appreagent/start}}
+                        :compiler-options {:optimizations :simple,
+                                           :output-feature-set :es8}}
+          :app-reagent-prod {:target :browser,
+                             :output-dir ".cljs/public",
+                             :asset-path "/r",
+                             :modules {:main {:entries [demo.appreagent],
+                                              :depends-on #{}
+                                              :init-fn demo.appreagent/start}}
+                             :compiler-options {:optimizations :advanced
+                                                :output-feature-set :es8}}
+          
+
+
           
           
           }}
 
-
-
-
- :shadow-mode :release ; production build - no source maps
-:advanced true
