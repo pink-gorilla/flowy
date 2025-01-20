@@ -9,13 +9,24 @@
   ($ :button.btn {:on-click on-click}
      children))
 
+(defui cookie []
+  (let [[state set-state!] (uix.core/use-state "please press the button to get a fortune cookie (multiple presses are ok)")
+        cookie-t (task 'demo.fortune-cookie/get-cookie)
+        get-cookie (fn []  
+                     (cookie-t (fn [c]
+                                 (set-state! c))
+                               (fn [err]
+                                 (println "could not get cookie. error: " err))))]
+    ($ :<>
+       ($ button {:on-click #(get-cookie)} "get fortune cookie")
+       ($ :p (str "cookie: " state)))))
+
 
 (def f (flow 'demo.counter/counter-fn))
 
 (defui counterflow []
   (let [flow-counter (use-flow f "waiting...")]
    ($ :<>
-     ($ :hr)
      ($ :p (str "counter: " flow-counter)))))
 
 (defui uixdemo []
@@ -26,22 +37,22 @@
        ($ button {:on-click #(set-state! inc)} "+"))))
 
 (defui app []
-  (let [[menu set-menu!] (uix.core/use-state "select something")
-        flow-counter (use-flow f "waiting...")
-       ]
+  (let [[menu set-menu!] (uix.core/use-state "select something")]
     ($ :<>
-       
+       ; selection menu
        ($ :select {:on-click #(set-menu! (-> % .-target .-value))}
-          ($ :option {:value "flowcounter"} "flow counter")
           ($ :option {:value "uixstate"} "uix state demo")
-          ($ :option {:value "c"} "c"))
+          ($ :option {:value "flowcounter"} "flow counter")
+          ($ :option {:value "cookie"} "fortune cookie"))
          ($ :p "selected: " menu)
-
+       ($ :hr)
        (case menu
          "uixstate"
          ($ uixdemo)
          "flowcounter"
          ($ counterflow)
+         "cookie"
+         ($ cookie)
          ; default
          ($ :<>)
        ))))
