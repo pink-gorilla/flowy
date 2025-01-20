@@ -99,3 +99,38 @@
       ;(m/? (m/sleep 10000))
       ;(println "task sleep done.")
      )))
+
+
+
+(defn flow [fun & args]
+  (m/ap
+   (let [id (get-req-id mx)
+         msg (if (seq args)
+               {:op :exec
+                :id id
+                :fun fun
+                :args args}
+               {:op :exec
+                :id id
+                :fun fun})
+         match-id (fn [msg]
+                    (= (:id msg) id))
+         result-msg-f (m/eduction
+                       (filter match-id)
+                       (:msg-flow mx))
+         ;flow-forwarder (m/reduce (fn [_ v]
+         ;                     (println "flow value: " v)
+         ;                     (m/amb (:val msg)))
+         ;                   nil
+         ;                   result-msg-f)
+         ]
+      ; first send the message
+     (println "making req: " msg)
+     (out-mbx msg)
+     (println "req sent!")
+      ; wait until msg received
+     ;(loop [msg (m/? result-msg-f)]
+     ;  (m/amb (:val msg) (recur (m/? in-mbx))))
+     ;(m/? flow-forwarder)
+     (let [msg (m/?> result-msg-f)]
+       (m/amb msg)))))

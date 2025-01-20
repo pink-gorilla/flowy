@@ -8,7 +8,7 @@
     (println "creating counter")
     (loop [i 0]
       (m/amb
-       (m/? (m/sleep 1000 i))
+       (m/? (m/sleep 5000 i))
        ;(println "i: " i)
        (recur (inc i)))))))
 
