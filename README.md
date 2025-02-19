@@ -30,7 +30,7 @@ finally section of the with-let. flow-state-a is a normal reagent atom.
 ## Reagent demo
 
 ```
-  cd demo
+  cd demo-standalone
   npm install
   npm run compile-reagent
   clj -M:app  
@@ -47,7 +47,7 @@ before the flow returns something.
 ## Pitch/UIX Demo
 
 ```
-  cd demo
+  cd demo-standalone
   npm install
   npm run compile
   clj -M:app  

@@ -28,9 +28,12 @@
 
 (defn make-handler [system]
   (ring/ring-handler
+   ; router
    (ring/router
     [["/" {:handler (fn [_]
                       (response/resource-response "public/index.html"))}]
+     ["/ping" {:get (fn [_] {:status 200 :body "pong"})}]
+     ;"time"   {:get demo.handler/time-handler}
      ["/ws" {:handler (handler-ws system)}]
      ["/r/*" (ring/create-resource-handler)]
      ;["/r/*" (ring/create-resource-handler {:path "public" :root "/r/"})]
@@ -41,6 +44,7 @@
                          ;wrap-keyword-params
                          ;middleware-db
                          ]}})
+   ; default handler
    (ring/routes
     (ring/create-default-handler
      {:not-found (constantly {:status 404 :body "Not found"})}))))
@@ -49,7 +53,7 @@
 ;; Run Jetty server
 (defn -main [& args]
   (let [port 9000
-        exs (exec/start-executor {:services [; clj 
+        exs (exec/start-executor {:services [; sp 
                                              {:fun 'demo.fortune-cookie/get-cookie}
                                              {:fun 'demo.calculator/add}
                                              {:fun 'demo.calculator/subtract}

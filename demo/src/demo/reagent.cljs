@@ -1,9 +1,8 @@
-(ns demo.appreagent
+(ns demo.reagent
   (:require 
-    [reagent.core :as r]
-    [reagent.dom.client :as rdom]
-    [flowy.reflower :refer [task flow]]
-    [flowy.reagent :refer [flow->ratom]]))
+   [reagent.core :as r]
+   [flowy.reflower :refer [task flow]]
+   [flowy.reagent :refer [flow->ratom]]))
 
 (def f (flow 'demo.counter/counter-fn))
 
@@ -52,8 +51,4 @@
          [:<>]
          )]))
 
-;; Mount the app to the DOM
-(defn start []
-  (let [root (rdom/create-root (.getElementById js/document "app"))]
-    (rdom/render root [app])))
 
