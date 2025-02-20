@@ -53,12 +53,12 @@
 ;; Run Jetty server
 (defn -main [& args]
   (let [port 9000
-        exs (exec/start-executor {:services [; sp 
-                                             {:fun 'demo.fortune-cookie/get-cookie}
-                                             {:fun 'demo.calculator/add}
-                                             {:fun 'demo.calculator/subtract}
-                                             ; ap
-                                             {:fun 'demo.counter/counter-fn :mode :ap}]})
+        exs (exec/start-executor {} [; sp 
+                                     {:fun 'demo.fortune-cookie/get-cookie}
+                                     {:fun 'demo.calculator/add}
+                                     {:fun 'demo.calculator/subtract}
+                                     ; ap
+                                     {:fun 'demo.counter/counter-fn :mode :ap}])
         rf (start-reflower exs)
         ;h (make-handler flowmaysta)
         h (make-handler rf)]

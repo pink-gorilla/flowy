@@ -9,7 +9,10 @@
 
   :exts {:start (extension/discover)}
 
-  :exec {:start (flowy.executor/start-executor {:services (:services (clip/ref :config))})}
+  :exec {:start (flowy.executor/start-executor 
+                 {:env {}
+                  :exts (clip/ref :exts)}
+                 (:services (clip/ref :config)))}
 
   :flowy {:start (flowy.reflower/start-reflower (clip/ref :exec))}
   

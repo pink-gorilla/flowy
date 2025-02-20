@@ -42,7 +42,6 @@
 
 
  :services [; sp 
-            {:fun demo.fortune-cookie/get-cookie}
             {:fun demo.calculator/add}
             {:fun demo.calculator/subtract}
             ; ap

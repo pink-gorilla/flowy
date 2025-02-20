@@ -3,13 +3,13 @@
    [flowy.client :refer [*ws-server-url*]]))
 
 (defn change-port [{:keys [webly-http-port shadow-dev-http-port] :as ports} url]
-  (let [detected-port (js/parseInt (:port url))]
+  (let [detected-port (js/parseInt (.-port url))]
     ; if the port matches the shadow-dev-http port, we are on shadow-dev, so we redirect
     (when  (= detected-port shadow-dev-http-port)
-      (println "this is a shadow-cljs-dev session. connecting flowy to WEBLY SERVER on port: " shadow-dev-http-port)
+      (println "this is a shadow-cljs-dev session. connecting flowy to WEBLY SERVER on port: " webly-http-port)
       (set! (.-port url) (str webly-http-port)))))
 
-(defn flowy-url [{:keys [webly-http-port shadow-dev-http-port] :as ports}]
+(defn flowy-url [ports]
   (let [url (new js/URL (.-location js/window))
         proto (.-protocol url)
         _ (set! (.-protocol url)
@@ -23,13 +23,18 @@
         _ (set! (.-pathname url) "/flowy")
         _ (change-port ports url)
         url-s (.toString url)]
-    (println "flowy-url: " url-s)
       ; ws://localhost:9000/?ELECTRIC_USER_VERSION=hyperfiddle_electric_client__dirty
     url-s))
 
 (defn start-flowy-service [{:keys [mode ports]}]
   (when (= mode :dynamic)
     (println "flowy ports: " ports)
-    (println "flowy url: " (flowy-url ports)))
+    (let [url (flowy-url ports)]
+       ;(println "old ws-server-url: " *ws-server-url*)  
+       (println "flowy url: " url)  
+       (set! *ws-server-url* url)
+       ;(println "new ws-server-url: " *ws-server-url*)  
+      )
+    )
   nil ; we dont wait on this.
   )

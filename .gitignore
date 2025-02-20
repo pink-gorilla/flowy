@@ -19,3 +19,4 @@ demo-webly/karma.conf.js
 demo-webly/package.json
 demo-webly/package-lock.json
 shadow-cljs.edn
+demo-standalone/.gorilla

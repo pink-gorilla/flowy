@@ -1,12 +1,11 @@
 {:deps {org.clojure/tools.logging {:mvn/version "1.2.4"}
         missionary/missionary          {:mvn/version "b.42"}
-        metosin/reitit-ring {:mvn/version "0.7.2"}
         ring/ring-core       {:mvn/version "1.13.0"}
         ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         com.cognitect/transit-clj      {:mvn/version "1.0.333"}
         com.cognitect/transit-cljs     {:mvn/version "0.8.280"}
-        com.cemerick/url     {:mvn/version "0.1.1"}
+        org.pinkgorilla/modular {:mvn/version "0.2.64"} ; encoding
+        org.pinkgorilla/extension {:mvn/version "0.0.14"} ; extension config
         }
-
 
 }

@@ -1,4 +1,8 @@
-(ns flowy.executor)
+(ns flowy.executor
+  (:require
+   [extension :refer [get-extensions]]
+   [modular.writer :refer [write-edn-private]]
+   ))
 
 (defn- resolve-symbol [s]
   (try
@@ -21,28 +25,37 @@
       fun - fully qualified symbol
       fixed - a fixed args to be passed to a stateful function which is its first parameter"
   [{:keys [services] :as this} {:keys [fun fixed] :as service-opts}]
-  (println "exposing: " fun)
+  (println "flowy exposing: " fun)
   (let [sfn (resolve-symbol fun)
         farg (get-farg this fixed)]
     (swap! services assoc fun (merge service-opts {:sfn sfn
                                                    :farg farg
                                                    })
            )
-    (println "services: " (keys @services))
+    
     ))
 
+(defn get-ext-services [exts]
+  (->> (get-extensions exts {:flowy []})
+       (map :flowy)
+       (apply concat)
+       (into [])))
 
 (defn start-executor
   "starts the executor service 
    :services - a vec of service-definition maps
    :env - the environment that gets (entirely or modified passed to a service that is stateful)"
-  [{:keys [services env]}]
+  [{:keys [env exts]
+    :or {exts []
+         env {}}} services-config]
   (println "starting clj-services ..")
   (let [this {:env env
-              :services (atom {})}]
-     (doall 
-       (for [service services]
-         (expose this service)))
+              :services (atom {})}
+        services (concat (get-ext-services exts) services-config)]
+    (write-edn-private "flowy-services" services)
+    (doall 
+     (for [service services]
+       (expose this service)))
     ; return the service state
     this))
 

@@ -55,6 +55,28 @@ before the flow returns something.
 
  Open Browser on localhost:9000
  
+
+## Reagent using webly demo
+
+```
+  cd demo-webly
+  1. install npm deps
+  clj -X:build :profile "npm-install"
+  
+  2. compile cljs using one of the following:
+  clj -X:build :profile "compile"
+  clj -X:build :profile "release"
+  clj -X:build :profile "release-adv"
+
+  3. run the app using one of the following
+  clj -X:run or
+  clj -X:run :profile '"watch"'
+  
+  compiled mode is localhost:9090 and watch mode is localhost:8000
+
+```  
+Open Browser on localhost:9090 
+
 # Babashka Client
 
 This is an experiment to see if babashka can be used as a commandline inspection tool;
