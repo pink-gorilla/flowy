@@ -290,3 +290,10 @@
 (defn handler-ws [system]
   (-> not-found-handler
       (wrap-electric-websocket system)))
+
+
+(defn flowy-handler-ws [req]
+  (if (ws/upgrade-request? req)
+    (ring-ws-handler req (get-in req [:ctx :flowy]))
+    (not-found-handler req)))
+  

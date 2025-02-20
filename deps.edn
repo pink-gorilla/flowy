@@ -5,6 +5,7 @@
         ring/ring-jetty-adapter {:mvn/version "1.13.0"}
         com.cognitect/transit-clj      {:mvn/version "1.0.333"}
         com.cognitect/transit-cljs     {:mvn/version "0.8.280"}
+        com.cemerick/url     {:mvn/version "0.1.1"}
         }
 
 

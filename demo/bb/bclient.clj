@@ -53,7 +53,7 @@
 
 
 (defn start-client []
-  (let [ws-url "ws://localhost:9000/ws"
+  (let [ws-url "ws://localhost:9000/flowy"
         ws (bws/websocket 
                     {:uri ws-url
                      :on-open on-open

@@ -1,0 +1,10 @@
+{:name "demo"
+ :lazy true
+ :depends-on #{:ui-repl}
+ :cljs-namespace [demo.reagent]
+ :cljs-ns-bindings {'demo.reagent {'app demo.reagent/app}}
+ ; runtime
+ :cljs-routes {"" demo.reagent/app}
+
+ ;
+ }

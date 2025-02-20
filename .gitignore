@@ -6,10 +6,6 @@ pom.xml.asc
 /classes/
 /target/
 /checkouts/
-.lein-deps-sum
-.lein-repl-history
-.lein-plugins/
-.lein-failures
 .nrepl-port
 .cpcache/
 .clj-kondo
@@ -18,3 +14,8 @@ pom.xml.asc
 node_modules
 .cljs
 .lsp
+demo-webly/.gorilla
+demo-webly/karma.conf.js
+demo-webly/package.json
+demo-webly/package-lock.json
+shadow-cljs.edn

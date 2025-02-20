@@ -20,7 +20,7 @@
           ;_ (.. url -searchParams (set "ELECTRIC_USER_VERSION" ELECTRIC_USER_VERSION))
           _ (set! (.-hash url) "") ; fragment is forbidden in WS URL https://websockets.spec.whatwg.org/#ref-for-dom-websocket-websocket%E2%91%A0
           url-s (.toString url)
-          url-s (str url-s "ws")
+          url-s (str url-s "flowy")
           ]
       (println "server-ws-url: " url-s)
       ; ws://localhost:9000/?ELECTRIC_USER_VERSION=hyperfiddle_electric_client__dirty

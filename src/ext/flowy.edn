@@ -1,0 +1,16 @@
+{:name "flowy"
+ ; build
+ :lazy false
+ :cljs-namespace [flowy.config]
+ :cljs-ns-bindings {'flowy.config {'start-flowy-service flowy.config/start-flowy-service}}
+ ; runtime
+ :cljs-service {:config-fn flowy.config/config-flowy
+                :start-fn flowy.config/start-flowy-service}
+
+ :web/routes [["/flowy" {:handler flowy.ring-adapter/flowy-handler-ws
+                         :middleware [webserver.middleware.ctx/ctx-middleware]
+                         :services #{:flowy}}]]}
+
+
+
+

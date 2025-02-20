@@ -1,0 +1,23 @@
+{:paths ["src"]
+ :deps {demo/demo {:local/root "../demo" :deps/manifest :deps}
+        org.pinkgorilla/webly {:local/root "../../webly/webly" :deps/manifest :deps}}
+ :aliases
+ {; BUILD (then exit)
+  :webly {:extra-paths ["src"]
+          :exec-fn webly.spa/webly-build
+          :exec-args {:config ["demo.edn"]
+                      :profile "npm-install"}}
+
+  :npm-install {:exec-args {:profile "npm-install"}}
+  :compile {:exec-args {:profile "compile"}}
+  :release {:exec-args {:profile "release"}}
+  :release-adv {:exec-args {:profile "release-adv"}}
+  :watch {:exec-args {:profile "watch"}}
+  
+  ; RUN SERVICES (keep running)
+  :run {:exec-fn modular.system/start!
+        :exec-args {:profile "jetty"
+                    :services "demo-services.edn"}}
+  
+  ;
+  }}

@@ -34,7 +34,7 @@
                       (response/resource-response "public/index.html"))}]
      ["/ping" {:get (fn [_] {:status 200 :body "pong"})}]
      ;"time"   {:get demo.handler/time-handler}
-     ["/ws" {:handler (handler-ws system)}]
+     ["/flowy" {:handler (handler-ws system)}]
      ["/r/*" (ring/create-resource-handler)]
      ;["/r/*" (ring/create-resource-handler {:path "public" :root "/r/"})]
      ]
