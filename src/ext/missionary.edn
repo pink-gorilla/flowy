@@ -1,0 +1,8 @@
+{;:name "missionary"
+  build
+ :lazy false
+ :cljs-namespace [missionary.core
+                  sci.configs.missionary]
+ :cljs-ns-bindings {'missionary.core  sci.configs.missionary/missionary-namespace}
+ 
+ }
