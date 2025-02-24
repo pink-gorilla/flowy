@@ -1,4 +1,5 @@
-# flowy
+# flowy [![GitHub Actions status |pink-gorilla/flowy](https://github.com/pink-gorilla/flowy/workflows/CI/badge.svg)](https://github.com/pink-gorilla/flowy/actions?workflow=CI)[![Clojars Project](https://img.shields.io/clojars/v/org.pinkgorilla/flowy.svg)](https://clojars.org/org.pinkgorilla/flowy)
+
 
 stage: totally experimental
 
