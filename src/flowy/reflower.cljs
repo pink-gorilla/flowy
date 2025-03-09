@@ -133,7 +133,7 @@
      ;  (m/amb (:val msg) (recur (m/? in-mbx))))
      ;(m/? flow-forwarder)
      (try (let [msg (m/?> result-msg-f)]
-            (m/amb msg))
+            (m/amb (:val msg)))
         (catch Cancelled c
             (println "unsubscribing flow!")   
             (out-mbx {:op :cancel
