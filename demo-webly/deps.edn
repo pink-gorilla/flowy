@@ -1,6 +1,6 @@
 {:paths ["src"]
  :deps {demo/demo {:local/root "../demo" :deps/manifest :deps}
-        org.pinkgorilla/webly {:mvn/version "0.9.716"}
+        org.pinkgorilla/webly {:mvn/version "0.9.720"}
         ;org.pinkgorilla/webly {:local/root "../../webly/webly" :deps/manifest :deps}
         }
  :aliases
@@ -11,7 +11,7 @@
 
   ; RUN SERVICES (keep running)
   :run {:exec-fn modular.system/start!
-        :exec-args {:profile "jetty"
+        :exec-args {:profile "watch"
                     :config ["demo-config.edn"]
                     :services "demo-services.edn"}}
   ;

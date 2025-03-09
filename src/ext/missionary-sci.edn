@@ -1,5 +1,5 @@
-{;:name "missionary"
-  build
+{:name "missionary-sci"
+ ; build
  :lazy false
  :cljs-namespace [missionary.core
                   sci.configs.missionary]

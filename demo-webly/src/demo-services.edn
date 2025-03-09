@@ -7,8 +7,8 @@
   :timbre {:start (modular.log/timbre-config!
                    (:timbre/clj (clip/ref :config)))}
 
-  :exts {:start (extension/discover)}
-
+  :exts {:start (extension/discover (:extension (clip/ref :config)))}
+  
   :exec {:start (flowy.executor/start-executor 
                  {:env {}
                   :exts (clip/ref :exts)}

@@ -1,6 +1,6 @@
 {:name "demo"
  :lazy true
- :depends-on #{:ui-repl}
+ :depends-on #{}
  :cljs-namespace [demo.reagent]
  :cljs-ns-bindings {'demo.reagent {'app demo.reagent/app}}
  ; runtime

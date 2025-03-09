@@ -1,4 +1,5 @@
-{:build {:disabled-extensions #{}}
+{:extension {:disabled #{"ui-tailwind"
+                         "missionary-sci"}}
 
  :web-server {:http {:port 9090}}
 
