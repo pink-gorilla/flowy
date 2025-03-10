@@ -42,7 +42,9 @@
   (send [_this value] (ws/send socket value))
   (send [_this value success-cb failure-cb] (ws/send socket value success-cb failure-cb))
   Pingable
-  (ping [_this] (ws/ping socket))
+  (ping [_this] 
+    (println "FLOWY SENDING PING!")
+    (ws/ping socket))
   (ping [_this value] (ws/ping socket (if (string? value) (java.nio.ByteBuffer/wrap (.getBytes value)) value)))
   (pong [_this] (ws/pong socket))
   (pong [_this value] (ws/pong socket (if (string? value) (java.nio.ByteBuffer/wrap (.getBytes value)) value))))
