@@ -19,7 +19,9 @@
 
 (def ELECTRIC-HEARTBEAT-INTERVAL
   "Delay between two server-send ping-emulating messages. Used to keep the connection up."
-  45000)
+  ;45000
+  7000
+  )
 
 (defprotocol Socket
   "An abstraction over various Socket impl. E.g. Ring-websocket Socket or HTTPKit
