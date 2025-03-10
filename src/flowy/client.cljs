@@ -2,8 +2,8 @@
   (:require 
    [clojure.string :as str]
    [missionary.core :as m]
-   [flowy.cljs-target :refer [do-browser]]
-   [flowy.encode :as io])
+   [transit.io :as io]
+   [flowy.cljs-target :refer [do-browser]])
   (:import missionary.Cancelled))
 
 (goog-define ELECTRIC_USER_VERSION "hyperfiddle_electric_client__dirty") ; url safe

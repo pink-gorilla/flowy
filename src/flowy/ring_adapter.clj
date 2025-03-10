@@ -8,7 +8,7 @@
             [missionary.core :as m]
             [ring.util.response :as response]
             [ring.websocket :as ws]
-            [flowy.encode :as io]
+            [transit.io :as io]
             )
   (:import missionary.Cancelled))
 
