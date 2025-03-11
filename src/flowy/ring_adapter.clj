@@ -8,8 +8,7 @@
             [missionary.core :as m]
             [ring.util.response :as response]
             [ring.websocket :as ws]
-            [transit.io :as io]
-            )
+            [transit.io :as io])
   (:import missionary.Cancelled))
 
 (def ELECTRIC-CONNECTION-TIMEOUT

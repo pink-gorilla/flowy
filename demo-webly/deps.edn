@@ -1,6 +1,6 @@
 {:paths ["src"]
  :deps {demo/demo {:local/root "../demo" :deps/manifest :deps}
-        org.pinkgorilla/webly {:mvn/version "0.9.720"}
+        org.pinkgorilla/webly {:mvn/version "0.9.721"}
         ;org.pinkgorilla/webly {:local/root "../../webly/webly" :deps/manifest :deps}
         }
  :aliases

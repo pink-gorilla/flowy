@@ -1,10 +1,10 @@
 {:deps {org.clojure/tools.logging {:mvn/version "1.2.4"}
         missionary/missionary          {:mvn/version "b.42"}
         ring/ring-core       {:mvn/version "1.13.0"}
-        ring/ring-jetty-adapter {:mvn/version "1.13.0"}
-        org.pinkgorilla/transit-ajax {:mvn/version "0.1.6"} ; encoding
-        org.pinkgorilla/modular {:mvn/version "0.2.64"}  ; modular.writer
-        org.pinkgorilla/extension {:mvn/version "0.0.14"} ; extension config
+        ring/ring-jetty-adapter {:mvn/version "1.13.0"} ; jetty config
+        org.pinkgorilla/transit-ajax {:mvn/version "0.1.10"} ; encoding
+        org.pinkgorilla/modular {:mvn/version "0.2.68"}  ; modular.writer
+        org.pinkgorilla/extension {:mvn/version "0.0.16"} ; extension config
         }
 
  :aliases {; github ci  
