@@ -9,10 +9,14 @@
 
   :exts {:start (extension/discover (:extension (clip/ref :config)))}
   
+  ;; executor
+
   :exec {:start (flowy.executor/start-executor 
                  {:env {}
                   :exts (clip/ref :exts)}
                  (:services (clip/ref :config)))}
+
+  ;; webserver
 
   :flowy {:start (flowy.reflower/start-reflower (clip/ref :exec))}
   
@@ -25,5 +29,7 @@
                   (:profile #ref [:modular]))
           :stop (webly.spa/stop-webly this)}
   
+  ;; repl
+
   :nrepl {:start (nrepl.server/start-server :bind "0.0.0.0" :port 9100)
           :stop (.close this)}}}
