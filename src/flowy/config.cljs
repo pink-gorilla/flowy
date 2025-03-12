@@ -1,5 +1,5 @@
 (ns flowy.config
-  (:require 
+  (:require
    [flowy.client :refer [*ws-server-url*]]))
 
 (defn change-port [{:keys [webly-http-port shadow-dev-http-port] :as ports} url]
@@ -31,10 +31,9 @@
     (println "flowy ports: " ports)
     (let [url (flowy-url ports)]
        ;(println "old ws-server-url: " *ws-server-url*)  
-       (println "flowy url: " url)  
-       (set! *ws-server-url* url)
+      (println "flowy url: " url)
+      (set! *ws-server-url* url)
        ;(println "new ws-server-url: " *ws-server-url*)  
-      )
-    )
+      ))
   nil ; we dont wait on this.
   )

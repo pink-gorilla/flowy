@@ -8,6 +8,9 @@
 
  :flowy [; one services is defined here, 
          ; the rest of the services are defined in the config.
-         {:fun demo.fortune-cookie/get-cookie}]
+         {:fun demo.fortune-cookie/get-cookie}
+         {:fun demo.fortune-cookie/get-cookie-bad}
+         
+         ]
  ;
  }

@@ -30,15 +30,15 @@
 ;;; TESTS ;;;
 (deftype P [state-])
 #_(tests
- (deffields x y)
- (def aP (->P (object-array 2)))
- (let [^P aP aP]
-   (fset aP x 1 y 2)            := 2
-   [(fget aP x) (fget aP y)]    := [1 2]
-   (fswap aP x inc)             := 2
-   (swap (.-state- aP) x inc)   := 3
-   (fgetset aP x 0)             := 3
-   (getset (.-state- aP) x 100) := 0
-   (fget aP x)                  := 100
-   (getswap (.-state- aP) x inc) := 100
-   (fget aP x)                   := 101))
+   (deffields x y)
+   (def aP (->P (object-array 2)))
+   (let [^P aP aP]
+     (fset aP x 1 y 2)            := 2
+     [(fget aP x) (fget aP y)]    := [1 2]
+     (fswap aP x inc)             := 2
+     (swap (.-state- aP) x inc)   := 3
+     (fgetset aP x 0)             := 3
+     (getset (.-state- aP) x 100) := 0
+     (fget aP x)                  := 100
+     (getswap (.-state- aP) x inc) := 100
+     (fget aP x)                   := 101))

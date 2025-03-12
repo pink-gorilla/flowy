@@ -15,7 +15,6 @@
 
 (def mns (sci/create-ns 'missionary.core nil))
 
-
 (def missionary-namespace
   {;'absolve (sci/copy-var m/absolve mns)
    ;'attempt (sci/copy-var m/attempt mns)

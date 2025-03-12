@@ -19,8 +19,7 @@
 (def ELECTRIC-HEARTBEAT-INTERVAL
   "Delay between two server-send ping-emulating messages. Used to keep the connection up."
   ;45000
-  7000
-  )
+  7000)
 
 (defprotocol Socket
   "An abstraction over various Socket impl. E.g. Ring-websocket Socket or HTTPKit
@@ -41,7 +40,7 @@
   (send [_this value] (ws/send socket value))
   (send [_this value success-cb failure-cb] (ws/send socket value success-cb failure-cb))
   Pingable
-  (ping [_this] 
+  (ping [_this]
     (println "FLOWY SENDING PING!")
     (ws/ping socket))
   (ping [_this value] (ws/ping socket (if (string? value) (java.nio.ByteBuffer/wrap (.getBytes value)) value)))
@@ -78,7 +77,7 @@
               (close socket 1012 "Misaligned client"))
           (do
             (log/error ;(dbg/update-stack-trace! e #(filter (partial dbg/stack-element-matches? #"hyperfiddle.*") %))
-                       "Websocket handler failure." ex-data)
+             "Websocket handler failure." ex-data)
             (close socket 1011 "Server process crash")))))))
 
 (defn write-msg
@@ -145,12 +144,10 @@
    1011 "Server closed websocket because of an unexpected condition."
    1015 "TLS handshake failure while establishing websocket connection."})
 
-
 (defn r-subject-at [^objects arr slot]
   (fn [!]
     (aset arr slot !)
     #(aset arr slot nil)))
-
 
 (defmethod handle-close-status-code :default
   [_ring-req _socket status-code & [reason]]
@@ -285,7 +282,6 @@
            :else                           (on-missmatch ring-request client-version user-version)))
        (next-handler ring-request)))))
 
-
 (defn not-found-handler [_ring-request]
   (-> (response/not-found "Not found")
       (response/content-type "text/plain")))
@@ -294,9 +290,8 @@
   (-> not-found-handler
       (wrap-electric-websocket system)))
 
-
 (defn flowy-handler-ws [req]
   (if (ws/upgrade-request? req)
     (ring-ws-handler req (get-in req [:ctx :flowy]))
     (not-found-handler req)))
-  
+

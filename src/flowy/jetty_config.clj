@@ -1,8 +1,7 @@
 (ns flowy.jetty-config
   (:import
    (org.eclipse.jetty.server.handler.gzip GzipHandler)
-   (org.eclipse.jetty.websocket.server.config JettyWebSocketServletContainerInitializer JettyWebSocketServletContainerInitializer$Configurator)
-))
+   (org.eclipse.jetty.websocket.server.config JettyWebSocketServletContainerInitializer JettyWebSocketServletContainerInitializer$Configurator)))
 
 (defn- add-gzip-handler!
   "Makes Jetty server compress responses. Optional but recommended."
@@ -23,10 +22,7 @@
        (.setMaxBinaryMessageSize wsContainer (* 100 1024 1024)) ; 100M - temporary
        (.setMaxTextMessageSize wsContainer (* 100 1024 1024))   ; 100M - temporary
        ))))
-
-
 (defn jetty-configurator [server]
-    (configure-websocket! server)
-    (add-gzip-handler! server))
-  
-  
+  (configure-websocket! server)
+  (add-gzip-handler! server))
+

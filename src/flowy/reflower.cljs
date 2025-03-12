@@ -34,7 +34,6 @@
              ;(m/? shutdown!)
          true)))))
 
-
 (defn create-multiplexer []
   (let [req-id (atom 0)
         dispose! ((boot-with-retry conn-interactor connector)
@@ -49,12 +48,9 @@
      :dispose-fn dispose!
      :msg-flow msg-flow}))
 
-
-
 (defn get-req-id [{:keys [req-id]}]
   (swap! req-id inc)
   @req-id)
-
 
 (defn make-req
   "returns a task"
@@ -93,15 +89,17 @@
      (println "req sent!")
       ; wait until msg received
      (let [msgs (m/? (m/reduce conj [] first-result-msg-f))
-           {:keys [val] :as full} (first msgs)]
+           {:keys [val err] :as full} (first msgs)]
+       (if val
+         val
+         (throw (ex-info (str "server error " err) {:fun fun
+                                                    :args args
+                                                    :message err})))
         ;(println "task msg: " full)
-       val)
+       )
       ;(m/? (m/sleep 10000))
       ;(println "task sleep done.")
      )))
-
-
-
 (defn flow [fun & args]
   (m/ap
    (let [id (get-req-id mx)
@@ -134,11 +132,8 @@
      ;(m/? flow-forwarder)
      (try (let [msg (m/?> result-msg-f)]
             (m/amb (:val msg)))
-        (catch Cancelled c
-            (println "unsubscribing flow!")   
+          (catch Cancelled c
+            (println "unsubscribing flow!")
             (out-mbx {:op :cancel
                       :id id})
-            (throw c)))
-     
-     
-     )))
+            (throw c))))))

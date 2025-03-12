@@ -6,30 +6,35 @@
    [missionary Cancelled]))
 
 (defn start-sp [write service {:keys [id] :as clj-call}]
-  (let [v (exec/call-fn service clj-call)]
-    (m/sp
-     (m/? (write {:op :exec
-                  :id id
-                  :val (m/? v)})))))
+  (m/sp
+   (try
+     (let [v (exec/call-fn service clj-call)]
+       ; success case
+       (m/? (write {:op :exec :id id :val (m/? v)})))
+     (catch Exception ex
+       (m/? (write {:op :exec :id id :err (ex-message ex)}))))))
+
+(defn start-clj [write service {:keys [id] :as clj-call}]
+  (m/sp
+   (try
+     (let [v (m/via m/cpu (exec/call-fn service clj-call))]
+      ; success case
+       (m/? (write {:op :exec
+                    :id id
+                    :val (m/? v)})))
+     (catch Exception ex
+       (m/? (write {:op :exec :id id :err (ex-message ex)}))))))
 
 (defn start-ap [write service {:keys [id] :as clj-call}]
   (let [f (exec/call-fn service clj-call)]
     (m/reduce (fn [_s v]
-                (try 
+                (try
                   (m/? (write {:op :exec
-                    :id id
-                    :val v}))
+                               :id id
+                               :val v}))
                   (catch Cancelled _
-                     (println "ap cancelled on ws close."))))
+                    (println "ap cancelled on ws close."))))
               nil f)))
-
-(defn start-clj [write service {:keys [id] :as clj-call}]
-  (let [v (m/via m/cpu
-                 (exec/call-fn service clj-call))]
-    (m/sp
-     (m/? (write {:op :exec
-                  :id id
-                  :val (m/? v)})))))
 
 (defn start-executing
   "returns a missionary task which can execute the clj-call"
@@ -81,7 +86,7 @@
                             (println "unknown op: " msg)))]
         (m/sp
          (try
-           (println "reflower task starting for websocket sessing!")
+           (println "reflower task starting for websocket session!")
                         ;(m/? (write "123"))
            (m/? (write {:op :message
                         :val "reflower started"}))

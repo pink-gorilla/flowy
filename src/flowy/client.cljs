@@ -1,5 +1,5 @@
 (ns flowy.client
-  (:require 
+  (:require
    [clojure.string :as str]
    [missionary.core :as m]
    [transit.io :as io]
@@ -9,23 +9,21 @@
 (goog-define ELECTRIC_USER_VERSION "hyperfiddle_electric_client__dirty") ; url safe
 
 (do-browser
-  (defn server-url []
-    (let [url (new js/URL (.-location js/window))
-          proto (.-protocol url)
-          _ (set! (.-protocol url)
-                  (case proto
-                    "http:" "ws:"
-                    "https:" "wss:"
-                    (throw (ex-info "Unexpected protocol" proto))))
+ (defn server-url []
+   (let [url (new js/URL (.-location js/window))
+         proto (.-protocol url)
+         _ (set! (.-protocol url)
+                 (case proto
+                   "http:" "ws:"
+                   "https:" "wss:"
+                   (throw (ex-info "Unexpected protocol" proto))))
           ;_ (.. url -searchParams (set "ELECTRIC_USER_VERSION" ELECTRIC_USER_VERSION))
-          _ (set! (.-hash url) "") ; fragment is forbidden in WS URL https://websockets.spec.whatwg.org/#ref-for-dom-websocket-websocket%E2%91%A0
-          url-s (.toString url)
-          url-s (str url-s "flowy")
-          ]
-      (println "server-ws-url: " url-s)
+         _ (set! (.-hash url) "") ; fragment is forbidden in WS URL https://websockets.spec.whatwg.org/#ref-for-dom-websocket-websocket%E2%91%A0
+         url-s (.toString url)
+         url-s (str url-s "flowy")]
+     (println "server-ws-url: " url-s)
       ; ws://localhost:9000/?ELECTRIC_USER_VERSION=hyperfiddle_electric_client__dirty
-      url-s
-      )))
+     url-s)))
 
 (def ^:dynamic *ws-server-url* (do-browser (server-url)))
 
@@ -39,13 +37,13 @@
       (let [ws (new js/WebSocket url)]
         (set! (.-binaryType ws) "arraybuffer")
         (set! (.-onopen ws)
-          (fn [_]
-            (remove-listeners ws)
-            (s ws)))
+              (fn [_]
+                (remove-listeners ws)
+                (s ws)))
         (set! (.-onclose ws)
-          (fn [_]
-            (remove-listeners ws)
-            (s nil)))
+              (fn [_]
+                (remove-listeners ws)
+                (s nil)))
         #(when (= (.-CONNECTING js/WebSocket) (.-readyState ws))
            (.close ws)))
       (catch :default e
@@ -53,16 +51,16 @@
 
 (defn wait-for-flush [ws]
   (m/sp
-    (while (< 4096 (.-bufferedAmount ws))
-      (m/? (m/sleep 50)))))
+   (while (< 4096 (.-bufferedAmount ws))
+     (m/? (m/sleep 50)))))
 
 (defn wait-for-close [ws]
   (fn [s f]
     (set! (.-onclose ws)
-      (fn [e]
-        (set! (.-onclose ws) nil)
-        (s {:code (.-code e)
-            :reason (.-reason e)})))
+          (fn [e]
+            (set! (.-onclose ws) nil)
+            (s {:code (.-code e)
+                :reason (.-reason e)})))
     #(when-not (nil? (.-onclose ws))
        (set! (.-onclose ws) nil)
        (f (Cancelled.)))))
@@ -89,14 +87,14 @@ msgs : the discrete flow of messages to send, spawned when websocket is connecte
 Returns a task producing nil or failing if the websocket was closed before end of reduction. "
   [cb msgs]
   (m/sp
-    (if-some [ws (m/? (connect *ws-server-url*))]
-      (try
-        (set! (.-onmessage ws) (comp (handle-hf-heartbeat ws cb) payload))
-        (m/? (m/race (send-all ws msgs) (wait-for-close ws)))
-        (finally
-          (when-not (= (.-CLOSED js/WebSocket) (.-readyState ws))
-            (.close ws) (m/? (m/compel wait-for-close)))))
-      {})))
+   (if-some [ws (m/? (connect *ws-server-url*))]
+     (try
+       (set! (.-onmessage ws) (comp (handle-hf-heartbeat ws cb) payload))
+       (m/? (m/race (send-all ws msgs) (wait-for-close ws)))
+       (finally
+         (when-not (= (.-CLOSED js/WebSocket) (.-readyState ws))
+           (.close ws) (m/? (m/compel wait-for-close)))))
+     {})))
 
 (defn fib-iter [[a b]]
   (case b
@@ -145,53 +143,53 @@ Returns a task producing nil or failing if the websocket was closed before end o
   ; client: (r/main ~info) r/main is in impl.runtime - returns peer - peer is functin write/read  ([write ?read on-error]
   ; conn = connector
   (m/sp
-    (let [ws-server-url *ws-server-url*]
-      (loop [delays retry-delays]
-        (let [s (object-array 1)]
-          (.log js/console "Connecting...")
-          (when-some [[delay & delays]
-                      (when-some [info (binding [*ws-server-url* ws-server-url]
-                                         (m/? (conn (fn [x] ((aget s 0) x))
-                                                (m/ap
-                                                  (.log js/console "Connected.")
-                                                  (let [r (m/rdv)]
-                                                    (m/amb=
-                                                      (do (m/? (client r (r-subject-at s 0)))
-                                                          (m/amb))
-                                                      (loop []
-                                                        (if-some [x (m/? r)]
-                                                          (m/amb x (recur))
-                                                          (m/amb)))))))))]
-                        (if-some [code (:code info)]
-                          (let [retry? (case code ; https://www.rfc-editor.org/rfc/rfc6455#section-7.4.1
-                                         (1000 1001) (do (js/console.debug (str "Electric websocket disconnected - " code)) true)
-                                         (1005 1006) (do (js/console.log "Electric Websocket connection lost.") true)
-                                         (1008)      (throw (ex-info "Stale Electric client" {:hyperfiddle.electric/type ::stale-client}))
-                                         (1012) ; Incompatible client. Do not attempt to reconnect (it would fail again)
-                                         (js/console.error (str "A mismatch between Electric client and server's programs was detected."
-                                                             "\nThe connection was closed. Refresh the page to attempt a reconnect."
-                                                             "\nCommonly, in local dev envs, this is a stale browser tab auto-reconnecting, or the clj and cljs REPLs are out of sync due to evaluating an Electric def in one process but not the other."
-                                                             "\nThis should not happen in prod. See `https://github.com/hyperfiddle/electric-starter-app/` for a reference configuration."))
-                                         (1013) ; server timeout - The WS spec defines 1011 - arbitrary server error,
+   (let [ws-server-url *ws-server-url*]
+     (loop [delays retry-delays]
+       (let [s (object-array 1)]
+         (.log js/console "Connecting...")
+         (when-some [[delay & delays]
+                     (when-some [info (binding [*ws-server-url* ws-server-url]
+                                        (m/? (conn (fn [x] ((aget s 0) x))
+                                                   (m/ap
+                                                    (.log js/console "Connected.")
+                                                    (let [r (m/rdv)]
+                                                      (m/amb=
+                                                       (do (m/? (client r (r-subject-at s 0)))
+                                                           (m/amb))
+                                                       (loop []
+                                                         (if-some [x (m/? r)]
+                                                           (m/amb x (recur))
+                                                           (m/amb)))))))))]
+                       (if-some [code (:code info)]
+                         (let [retry? (case code ; https://www.rfc-editor.org/rfc/rfc6455#section-7.4.1
+                                        (1000 1001) (do (js/console.debug (str "Electric websocket disconnected - " code)) true)
+                                        (1005 1006) (do (js/console.log "Electric Websocket connection lost.") true)
+                                        (1008)      (throw (ex-info "Stale Electric client" {:hyperfiddle.electric/type ::stale-client}))
+                                        (1012) ; Incompatible client. Do not attempt to reconnect (it would fail again)
+                                        (js/console.error (str "A mismatch between Electric client and server's programs was detected."
+                                                               "\nThe connection was closed. Refresh the page to attempt a reconnect."
+                                                               "\nCommonly, in local dev envs, this is a stale browser tab auto-reconnecting, or the clj and cljs REPLs are out of sync due to evaluating an Electric def in one process but not the other."
+                                                               "\nThis should not happen in prod. See `https://github.com/hyperfiddle/electric-starter-app/` for a reference configuration."))
+                                        (1013) ; server timeout - The WS spec defines 1011 - arbitrary server error,
                                         ; and 1015 - TLS exception. 1012, 1013, and 1014 are undefined. We
                                         ; pick 1013 for "Server closed the connection because it didn't hear of
                                         ; this client for too long".
-                                         (do (js/console.log "Electric server timed out, considering this Electric client inactive.")
-                                             true)
+                                        (do (js/console.log "Electric server timed out, considering this Electric client inactive.")
+                                            true)
                                         ; else
-                                         (do (js/console.log (str "Electric Websocket disconnected for an unexpected reason - " (pr-str info)))
-                                           true))]
-                            (when retry?
-                              (m/? (wait-for-window-to-be-visible))
-                              (seq retry-delays)))
-                          (do (.log js/console "Electric client failed to connect to Electric server.") delays)))]
-            (.log js/console (str "Next attempt in " (/ delay 1000) " seconds."))
-            (recur (m/? (m/sleep delay delays)))))))))
+                                        (do (js/console.log (str "Electric Websocket disconnected for an unexpected reason - " (pr-str info)))
+                                            true))]
+                           (when retry?
+                             (m/? (wait-for-window-to-be-visible))
+                             (seq retry-delays)))
+                         (do (.log js/console "Electric client failed to connect to Electric server.") delays)))]
+           (.log js/console (str "Next attempt in " (/ delay 1000) " seconds."))
+           (recur (m/? (m/sleep delay delays)))))))))
 
 (defn reload-when-stale [task]
   (fn [s f]
     (task s (fn [error]
               (when (= ::stale-client (:hyperfiddle.electric/type (ex-data error)))
                 (do (js/console.log "Electric server and Electric client version mismatches. Refreshing page to load new assets.")
-                  (.reload (.-location js/window))))
+                    (.reload (.-location js/window))))
               (f error)))))

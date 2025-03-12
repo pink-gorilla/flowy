@@ -1,8 +1,7 @@
 (ns flowy.executor
   (:require
    [extension :refer [get-extensions]]
-   [modular.writer :refer [write-edn-private]]
-   ))
+   [modular.writer :refer [write-edn-private]]))
 
 (defn- resolve-symbol [s]
   (try
@@ -29,11 +28,7 @@
   (let [sfn (resolve-symbol fun)
         farg (get-farg this fixed)]
     (swap! services assoc fun (merge service-opts {:sfn sfn
-                                                   :farg farg
-                                                   })
-           )
-    
-    ))
+                                                   :farg farg}))))
 
 (defn get-ext-services [exts]
   (->> (get-extensions exts {:flowy []})
@@ -53,13 +48,13 @@
               :services (atom {})}
         services (concat (get-ext-services exts) services-config)]
     (write-edn-private "flowy-services" services)
-    (doall 
+    (doall
      (for [service services]
        (expose this service)))
     ; return the service state
     this))
 
-(defn call-fn [{:keys [sfn farg] :as service}  
+(defn call-fn [{:keys [sfn farg] :as service}
                {:keys [args]
                 :or {args []}
                 :as clj-call}]

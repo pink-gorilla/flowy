@@ -49,3 +49,7 @@
    (let [size (count db)
          index (rand-int size)]
      (get-cookie index))))
+
+
+(defn get-cookie-bad []
+  (throw (ex-info "bad-fortune" {:msg "just a test!"})))
