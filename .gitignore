@@ -20,3 +20,5 @@ demo-webly/package.json
 demo-webly/package-lock.json
 shadow-cljs.edn
 demo-standalone/.gorilla
+.flowy
+.calva

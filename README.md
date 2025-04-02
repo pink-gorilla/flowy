@@ -72,6 +72,7 @@ before the flow returns something.
   3. run the app using one of the following
   clj -X:run or
   clj -X:run :profile '"watch"'
+  clj -X:run :profile '"jetty"'
   
   compiled mode is localhost:9090 and watch mode is localhost:8000
 

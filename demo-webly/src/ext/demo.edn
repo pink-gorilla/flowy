@@ -12,5 +12,12 @@
          {:fun demo.fortune-cookie/get-cookie-bad}
          
          ]
+ 
+ :web/routes [["/test" {:handler demo.handler/test-handler
+                        :middleware [;webserver.middleware.ctx/ctx-middleware
+                                      flowy.browser-id-middleware/flowy-browser-id-middleware]
+                        :services #{#_:flowy}
+                        
+                        }]]
  ;
  }

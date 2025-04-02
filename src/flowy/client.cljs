@@ -103,7 +103,10 @@ Returns a task producing nil or failing if the websocket was closed before end o
 
 (def fib (map first (iterate fib-iter [1 1])))
 
-(comment (take 5 fib2) := [1 1 2 3 5])
+(comment
+  (take 5 fib)
+  ;
+  )
 
 (def retry-delays (map (partial * 100) (next fib)))
 ;; Browsers throttle websocket connects after too many attempts in a short time.

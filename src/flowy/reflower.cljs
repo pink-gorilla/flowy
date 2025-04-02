@@ -7,6 +7,12 @@
 (def out-mbx (m/mbx))
 (def in-mbx (m/mbx))
 
+(defn set-cookie [{:keys [cookie message]}]
+  (println "message: " message)
+  (when cookie
+    (println "setting cookie: " cookie)
+    (set! (.-cookie js/document) cookie)))
+
 (defn conn-interactor [write read]
   ; this fn gets called whenever the connection is established.
   (println "conn-interactor ws established")
@@ -20,6 +26,9 @@
         process-msg (m/reduce
                      (fn [_ msg]
                        (println "interactor rcvd: " msg)
+                       ; {:val true-queen-8, :cookie flowy-browser-id=true-queen-8; expires=Sat, 31 Mar 2035 01:08:34 GMT; path=/;, :op :message}
+                       (when (= :message (:op msg))
+                         (set-cookie msg))
                        (in-mbx msg))
                      nil msg-in)]
     (m/sp

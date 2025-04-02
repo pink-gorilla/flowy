@@ -231,57 +231,6 @@
       (ring-ws-handler ring-request entrypoint)
       (next-handler ring-request))))
 
-(defn wrap-reject-stale-client
-  "A Ring 1.11+ compatible middleware intercepting websocket UPGRADE request and
-  checking if Electric client and Electric server versions matches.
-  An Electric client is allowed to connect if:
-  - its version matches the server's version,
-  - the server does not have a defined version (dev mode).
-  Otherwise, the websocket connection is gracefully rejected and the client is
-  instructed to reload the page so to get new javascript assets.
-
-  The rejection action can be redefined by providing an `on-mismatch` callback
-  argument taking:
-  - ring upgrade request,
-  - client-version,
-  - server-version,
-  and returning the ring handler to be applied.
-
-  e.g.
-  With ring-jetty 1.11+
-  ```
-  (wrap-reject-stale-client handler {:hyperfiddle.electric/user-version nil})     ; will accept any client
-  (wrap-reject-stale-client handler {:hyperfiddle.electric/user-version \"12345\"}) ; will only accept clients of version 12345
-  ```
-
-  With http-kit, which is not fully ring 1.11+ compliant as of Jan 9 2024
-  ```
-  (wrap-reject-stale-client handler {:hyperfiddle.electric/user-version \"12345\"}
-    (fn on-mismatch [ring-request client-version server-version]
-      (log/info 'wrap-reject-stale-client \": Electric client connection was rejected because client version doesn't match the server version. Client was instructed to perform a page reload so to get new javascript assets.\"
-        {:client-version (pr-str client-version)
-         :server-version (pr-str server-version)})
-      (httpkit/as-channel ring-request ; this is HTTPkit specific
-        (electric-httpkit/reject-websocket-handler 1008 \"stale client\") ; Websocket close code 1008 instructs the Electric client of the version mismatch
-      )))
-  ```"
-  ([next-handler config]
-   (wrap-reject-stale-client next-handler config
-                             (fn on-mismatch [_ring-request client-version server-version]
-                               (log/info 'wrap-reject-stale-client ": Electric client connection was rejected because client version doesn't match the server version. Client was instructed to perform a page reload so to get new javascript assets."
-                                         {:client-version (pr-str client-version)
-                                          :server-version (pr-str server-version)})
-                               {::ws/listener (reject-websocket-handler 1008 "stale client")}))) ; https://www.rfc-editor.org/rfc/rfc6455#section-7.4.1
-  ([next-handler {:keys [:hyperfiddle.electric/user-version]} on-missmatch]
-   (fn [ring-request]
-     (if (ws/upgrade-request? ring-request)
-       (let [client-version (get-in ring-request [:query-params "ELECTRIC_USER_VERSION"])]
-         (cond
-           (nil? user-version)             (next-handler ring-request)
-           (= client-version user-version) (next-handler ring-request)
-           :else                           (on-missmatch ring-request client-version user-version)))
-       (next-handler ring-request)))))
-
 (defn not-found-handler [_ring-request]
   (-> (response/not-found "Not found")
       (response/content-type "text/plain")))
@@ -295,3 +244,7 @@
     (ring-ws-handler req (get-in req [:ctx :flowy]))
     (not-found-handler req)))
 
+(defn flowy-handler-ws2 [req]
+  (if (ws/upgrade-request? req)
+    (ring-ws-handler req (get-in req [:ctx :flowy]))
+    req))
