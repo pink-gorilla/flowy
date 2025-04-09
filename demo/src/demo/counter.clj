@@ -15,3 +15,7 @@
 (defn counter-fn []
   counter)
   
+
+(defn counter-bad-fn []
+  ; should return an ap, but to simulate something bad, we return nil
+  nil)

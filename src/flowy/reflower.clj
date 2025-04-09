@@ -23,6 +23,7 @@
 (defn start-sp [logger write service {:keys [id] :as clj-call}]
   (m/sp
    (try
+     (l/log logger "start-sp:" clj-call)
      (let [v (exec/call-fn service clj-call)]
        ; success case
        (m/? (write {:op :exec :id id :val (m/? v)})))
@@ -32,6 +33,7 @@
 (defn start-clj [logger write service {:keys [id] :as clj-call}]
   (m/sp
    (try
+     (l/log logger "start-clj:" clj-call)
      (let [v (m/via m/cpu (exec/call-fn service clj-call))]
       ; success case
        (m/? (write {:op :exec
@@ -41,6 +43,7 @@
        (m/? (write {:op :exec :id id :err (ex-message ex)}))))))
 
 (defn start-ap [logger write service {:keys [id] :as clj-call}]
+  (l/log logger "start-ap:" clj-call)
   (when-let [f (exec/call-fn service clj-call)]
     (m/reduce (fn [_s v]
                 (try
@@ -98,16 +101,16 @@
                                 (if-let [t (start-executing logger write s msg)]
                                   (add-task id (t
                                                 (fn [r]
-                                                  (l/log logger "task completed: " r)
+                                                  (l/log logger "task" msg "completed: " r)
                                                   (remove-task id))
                                                 (fn [e]
-                                                  (l/log logger "task crashed: " e)
+                                                  (l/log logger "task " msg "crashed: " e)
                                                   (remove-task id))))
                                   (do (l/log logger "start error: " msg)
                                       (m/? (write {:op :exec
                                                    :id id
                                                    :error "start error"}))))
-                                (do (l/log logger "unkown service: " msg)  
+                                (do (l/log logger "unkown service: " msg)
                                     (m/? (write {:op :exec
                                                  :id id
                                                  :error "unknown service"}))))

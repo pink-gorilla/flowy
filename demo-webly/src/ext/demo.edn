@@ -1,23 +1,23 @@
 {:name "demo"
  :lazy true
  :depends-on #{}
- :cljs-namespace [demo.reagent]
- :cljs-ns-bindings {'demo.reagent {'app demo.reagent/app}}
+ :cljs-namespace [demo.reagent
+                  demo.wapp]
+ :cljs-ns-bindings {'demo.reagent {'app demo.reagent/app}
+                    'demo.wapp {'wrap-app demo.wapp/wrap-app
+                                'routes demo.wapp/routes}}
  ; runtime
- :cljs-routes {"" demo.reagent/app}
-
+ 
  :flowy [; one services is defined here, 
          ; the rest of the services are defined in the config.
          {:fun demo.fortune-cookie/get-cookie}
-         {:fun demo.fortune-cookie/get-cookie-bad}
-         
-         ]
+         {:fun demo.fortune-cookie/get-cookie-bad}]
  
  :web/routes [["/test" {:handler demo.handler/test-handler
                         :middleware [;webserver.middleware.ctx/ctx-middleware
-                                      flowy.browser-id-middleware/flowy-browser-id-middleware]
-                        :services #{#_:flowy}
-                        
-                        }]]
+                                     flowy.browser-id-middleware/flowy-browser-id-middleware]
+                        :services #{#_:flowy}}]]
+ 
+ :cljs-routes-reitit demo.wapp/routes
  ;
  }

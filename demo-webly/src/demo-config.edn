@@ -4,11 +4,9 @@
  :web-server {:http {:port 9090}}
 
  :spa {:title "flowy Demo"
-       ;:start-user-app [:demo/start]
-       ;:spinner "webly/loading.svg"
-       ;:icon "webly/icon/pinkgorilla32.png" ; "webly/icon/silver.ico"  ; gorilla is much smaller than silver
-       ;:loading-image-url "webly/loadimage/library.jpg" ; 
-       }
+       :mount-fn router.app/mount}
+ 
+ :reitit {:wrap demo.wapp/wrap-app}
 
  :timbre/clj {:min-level [[#{"org.eclipse.jetty.*"} :warn]
                           [#{"*"} :info]]
@@ -46,7 +44,9 @@
             {:fun demo.calculator/add}
             {:fun demo.calculator/subtract}
             ; ap
-            {:fun demo.counter/counter-fn :mode :ap}]
+            {:fun demo.counter/counter-fn :mode :ap}
+            {:fun demo.counter/counter-bad-fn :mode :ap}
+            ]
 
 ;                
  }

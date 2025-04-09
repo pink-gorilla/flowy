@@ -4,10 +4,9 @@
    [flowy.reflower :refer [task flow]]
    [flowy.reagent :refer [flow->ratom]]))
 
-(def f (flow 'demo.counter/counter-fn))
-
-(defn counter-component []
-  (r/with-let [[counter-a dispose!] (flow->ratom f "waiting ..")]
+(defn counter-component [fn-symbol]
+  (r/with-let [f (flow fn-symbol)
+               [counter-a dispose!] (flow->ratom f "waiting ..")]
     [:div
      [:p "counter: " (str @counter-a)]]
     (finally
@@ -38,19 +37,21 @@
     ; selection menu
      [:select {:on-click #(reset! menu-a (-> % .-target .-value))}
       [:option {:value "-"} "< Select an option >"]
-      [:option {:value "flowcounter"} "flow counter"]
       [:option {:value "cookie"} "fortune cookie"]
-      [:option {:value "bad-cookie"} "fortune cookie (exception)"]]
+      [:option {:value "bad-cookie"} "fortune cookie (exception)"]
+      [:option {:value "flowcounter"} "flow counter"]
+      [:option {:value "flowcounter-bad"} "flow counter (bad: no ap)"]]
      [:p "selected: " @menu-a]
      [:hr]
      (case @menu-a
-       "flowcounter"
-       [counter-component]
        "cookie"
        [cookie-component 'demo.fortune-cookie/get-cookie]
        "bad-cookie"
        [cookie-component 'demo.fortune-cookie/get-cookie-bad]
+       "flowcounter"
+       [counter-component 'demo.counter/counter-fn]
+       "flowcounter-bad"
+       [counter-component 'demo.counter/counter-bad-fn]
          ; default
        [:<>])]))
-
 

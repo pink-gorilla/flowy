@@ -59,7 +59,7 @@
                 :or {args []}
                 :as clj-call}]
   ;(println "clj-call: " clj-call " service: " service)
-  (println "clj-call: " clj-call)
+  ;(println "clj-call: " clj-call)
   (let [args (if farg
                (concat [farg] args)
                args)]
