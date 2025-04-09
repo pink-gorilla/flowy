@@ -41,7 +41,7 @@
        (m/? (write {:op :exec :id id :err (ex-message ex)}))))))
 
 (defn start-ap [logger write service {:keys [id] :as clj-call}]
-  (let [f (exec/call-fn service clj-call)]
+  (when-let [f (exec/call-fn service clj-call)]
     (m/reduce (fn [_s v]
                 (try
                   (m/? (write {:op :exec
@@ -95,16 +95,22 @@
 
                               :exec
                               (if-let [s (exec/get-service exs msg)]
-                                (let [t (start-executing logger write s msg)
-                                      dispose! (t
+                                (if-let [t (start-executing logger write s msg)]
+                                  (add-task id (t
                                                 (fn [r]
                                                   (l/log logger "task completed: " r)
                                                   (remove-task id))
                                                 (fn [e]
                                                   (l/log logger "task crashed: " e)
-                                                  (remove-task id)))]
-                                  (add-task id dispose!))
-                                (l/log logger "not task found for msg: " msg))
+                                                  (remove-task id))))
+                                  (do (l/log logger "start error: " msg)
+                                      (m/? (write {:op :exec
+                                                   :id id
+                                                   :error "start error"}))))
+                                (do (l/log logger "unkown service: " msg)  
+                                    (m/? (write {:op :exec
+                                                 :id id
+                                                 :error "unknown service"}))))
                               :cancel
                               (cancel-task id)
                             ; else
