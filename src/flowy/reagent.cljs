@@ -6,9 +6,9 @@
 (defn flow->ratom [f initial-value]
   (println "FLOW INIT initial value: " initial-value "flow: " f)
   (let [curr-a (r/atom initial-value)
-        dispose! (let [_ (println "FLOW SUBSCRIBE")
+        dispose! (let [_ (println "flow->ratom SUBSCRIBE")
                        task (m/reduce (fn [_r v]
-                                        (println "NEW FLOW VALUE: " v)
+                                        (println "flow->ratom VALUE: " v)
                                         (reset! curr-a v)
                                         v) initial-value f)]
                    (task
@@ -19,10 +19,10 @@
 (defn task->ratom [t initial-value]
   (println "TASK INIT initial value: " initial-value)
   (let [curr-a (r/atom initial-value)
-        dispose! (let [_ (println "GETTING TASK")
+        dispose! (let [_ (println "task->ratom exec")
                        task (m/sp
                              (let [v (m/? t)]
-                               (println "NEW TASK VALUE: " v)
+                               (println "task->ratom VALUE: " v)
                                (reset! curr-a v)
                                v))]
                    (task
