@@ -12,8 +12,8 @@
                                         (reset! curr-a v)
                                         v) initial-value f)]
                    (task
-                    #(println "task completed. error: " %)
-                    #(println "task crashed. error: " %)))]
+                    #(println "flow->ratom completed:  " %)
+                    #(println "flow->ratom error: " %)))]
     [curr-a dispose!]))
 
 (defn task->ratom [t initial-value]
@@ -26,7 +26,7 @@
                                (reset! curr-a v)
                                v))]
                    (task
-                    #(println "task completed. value: " %)
-                    #(println "task crashed. error: " %)))]
+                    #(println "task->ratom completed. value: " %)
+                    #(println "task->ratom crashed: " %)))]
     [curr-a dispose!]))
 

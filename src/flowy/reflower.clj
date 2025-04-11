@@ -103,9 +103,15 @@
                                                 (fn [r]
                                                   (l/log logger "task" msg "completed: " r)
                                                   (remove-task id))
-                                                (fn [e]
-                                                  (l/log logger "task " msg "crashed: " e)
-                                                  (remove-task id))))
+                                                (fn [ex]
+                                                  ;(l/log logger "task " msg "crashed: " ex)
+                                                  (l/log logger "task " msg " crashed "
+                                                         " ex-message: " (ex-message ex)
+                                                         " ex-data: " (ex-data ex)
+                                                         " ex-cause: " (ex-cause ex)
+                                                         " ex full:" ex)
+                                                  (remove-task id)
+                                                  (m/? (write {:op :exec :id id :err (ex-message ex)})))))
                                   (do (l/log logger "start error: " msg)
                                       (m/? (write {:op :exec
                                                    :id id

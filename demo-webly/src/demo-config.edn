@@ -46,6 +46,8 @@
             ; ap
             {:fun demo.counter/counter-fn :mode :ap}
             {:fun demo.counter/counter-bad-fn :mode :ap}
+            {:fun demo.counter/counter-ex-fn :mode :ap}
+            
             ]
 
 ;                

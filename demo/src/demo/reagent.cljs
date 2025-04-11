@@ -40,7 +40,9 @@
       [:option {:value "cookie"} "fortune cookie"]
       [:option {:value "bad-cookie"} "fortune cookie (exception)"]
       [:option {:value "flowcounter"} "flow counter"]
-      [:option {:value "flowcounter-bad"} "flow counter (bad: no ap)"]]
+      [:option {:value "flowcounter-bad"} "flow counter (bad: no ap)"]
+      [:option {:value "flowcounter-ex"} "flow counter (throws ex on 3)"]
+      ]
      [:p "selected: " @menu-a]
      [:hr]
      (case @menu-a
@@ -52,6 +54,8 @@
        [counter-component 'demo.counter/counter-fn]
        "flowcounter-bad"
        [counter-component 'demo.counter/counter-bad-fn]
+       "flowcounter-ex"
+       [counter-component 'demo.counter/counter-ex-fn]
          ; default
        [:<>])]))
 
