@@ -1,8 +1,9 @@
 {:paths ["src"]
- :deps {demo/demo {:local/root "../demo" :deps/manifest :deps}
-        org.pinkgorilla/webly {:mvn/version "0.9.724"} ; build tool
-        org.pinkgorilla/css-theme {:mvn/version "0.1.8"}
-        org.pinkgorilla/ui-router {:mvn/version "0.2.40"}}
+ :deps {org.clojure/clojure    {:mvn/version "1.12.4"}
+        org.pinkgorilla/ui-router {:mvn/version "0.3.45"}
+        org.pinkgorilla/webly {:mvn/version "0.20.732"} ; build tool
+        demo/demo {:local/root "../demo" :deps/manifest :deps}
+        }
  :aliases
  {; BUILD (then exit)
   :build {:exec-fn webly.spa/webly-build

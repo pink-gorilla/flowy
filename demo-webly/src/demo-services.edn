@@ -3,21 +3,16 @@
  :components
  {:config1 {:start (modular.config/load-config! (:config #ref [:modular]))}
   :config {:start (deref (clip/ref :config1))}
-
   :timbre {:start (modular.log/timbre-config!
                    (:timbre/clj (clip/ref :config)))}
-
   :exts {:start (extension/discover (:extension (clip/ref :config)))}
   
-  ;; executor
-  
+  ;; executor 
   :exec {:start (flowy.executor/start-executor 
                  {:env {}
                   :exts (clip/ref :exts)}
                  (:services (clip/ref :config)))}
-
   ;; webserver
-
   :webly {:start (webly.spa/start-webly
                   {:exts (clip/ref :exts)
                    :ctx {:flowy (flowy.reflower/start-reflower (clip/ref :exec))}}

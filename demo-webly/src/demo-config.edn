@@ -5,7 +5,6 @@
 
  :spa {:title "flowy Demo"
        :mount-fn router.app/mount}
- 
  :reitit {:wrap demo.wapp/wrap-app}
 
  :timbre/clj {:min-level [[#{"org.eclipse.jetty.*"} :warn]
