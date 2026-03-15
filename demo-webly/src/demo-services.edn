@@ -6,18 +6,17 @@
   :timbre {:start (modular.log/timbre-config!
                    (:timbre/clj (clip/ref :config)))}
   :exts {:start (extension/discover (:extension (clip/ref :config)))}
-  
+
+  ;; webserver  
   :token {:start (token.core/start-token-service
                   {:users {}
                    :secret "AbHzj834ri9"
                    :store-path ".gorilla/tokenstore"
                    :providers {}
                    :auth-expiry 604800})}
-
   :clj {:start (clj-service.core/start-clj-services
                  {:exts (clip/ref :exts)
                   :env {}})}
-  ;; webserver
   :webly {:start (webly.spa/start-webly
                   {:exts (clip/ref :exts)
                    :ctx {:token (clip/ref :token)
