@@ -1,9 +1,11 @@
 (ns flowy.reflower
   (:require
+    [taoensso.timbre :refer [debug debugf info infof warn error]]
    [missionary.core :as m]
    [tick.core :as t]
    [human-id.core :refer [human-id]]
-   [flowy.executor :as exec]
+   [clj-service.core :as exec]
+   ;[flowy.executor :as exec]
    [flowy.log :as l])
   (:import
    [missionary Cancelled]
@@ -68,8 +70,8 @@
   (fn [ring-req]
     ;(println "flomaysta: a")
     ;(println "a: " a)
-    (println "reflower client wants to connect with ring-req: " (keys ring-req))
-    (let [browser-id (or (:flowy-browser-id ring-req) (human-id))
+    (info "reflower client wants to connect with ring-req: " (keys ring-req))
+    (let [browser-id (or (:browser-id ring-req) (human-id))
           logger (l/create-logger browser-id)]
       (l/log logger "\n\nsession started: " browser-id)
       (fn [write read]

@@ -7,17 +7,19 @@
                     'demo.wapp {'wrap-app demo.wapp/wrap-app
                                 'routes demo.wapp/routes}}
  ; runtime
- 
- :flowy [; one services is defined here, 
-         ; the rest of the services are defined in the config.
-         {:fun demo.fortune-cookie/get-cookie}
-         {:fun demo.fortune-cookie/get-cookie-bad}]
- 
- :web/routes [["/test" {:handler demo.handler/test-handler
-                        :middleware [;webserver.middleware.ctx/ctx-middleware
-                                     flowy.browser-id-middleware/flowy-browser-id-middleware]
-                        :services #{#_:flowy}}]]
- 
  :cljs-routes-reitit demo.wapp/routes
+
+ :clj-service [; one services is defined here, 
+               ; the rest of the services are defined in the config.
+               {:fun demo.fortune-cookie/get-cookie}
+               {:fun demo.fortune-cookie/get-cookie-bad}
+               
+               ; sp 
+               {:fun demo.calculator/add}
+               {:fun demo.calculator/subtract}
+               ; ap
+               {:fun demo.counter/counter-fn :mode :ap}
+               {:fun demo.counter/counter-bad-fn :mode :ap}
+               {:fun demo.counter/counter-ex-fn :mode :ap}]
  ;
  }

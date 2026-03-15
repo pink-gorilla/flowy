@@ -4,11 +4,12 @@
   ring-jetty out of the box, and can be extended to other servers. See
   `hyperfiddle.electric-httpkit-adapter` for an example of an extension."
   (:refer-clojure :exclude [send])
-  (:require [clojure.tools.logging :as log]
-            [missionary.core :as m]
-            [ring.util.response :as response]
-            [ring.websocket :as ws]
-            [transit.io :as io])
+  (:require
+   [clojure.tools.logging :as log]
+   [missionary.core :as m]
+   [ring.util.response :as response]
+   [ring.websocket :as ws]
+   [transit.io :as io])
   (:import missionary.Cancelled))
 
 (def ELECTRIC-CONNECTION-TIMEOUT

@@ -22,6 +22,7 @@
        (.setMaxBinaryMessageSize wsContainer (* 100 1024 1024)) ; 100M - temporary
        (.setMaxTextMessageSize wsContainer (* 100 1024 1024))   ; 100M - temporary
        ))))
+
 (defn jetty-configurator [server]
   (configure-websocket! server)
   (add-gzip-handler! server))

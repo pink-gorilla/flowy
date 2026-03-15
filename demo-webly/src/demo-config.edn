@@ -37,17 +37,5 @@
                 {:kb "ctrl-y l" :handler [:login/dialog] :desc "login"}
                 {:kb "win-y l" :handler [:login/dialog] :desc "login"}
                 {:kb "win-z l" :handler [:login/dialog] :desc "login"}]
-
-
- :services [; sp 
-            {:fun demo.calculator/add}
-            {:fun demo.calculator/subtract}
-            ; ap
-            {:fun demo.counter/counter-fn :mode :ap}
-            {:fun demo.counter/counter-bad-fn :mode :ap}
-            {:fun demo.counter/counter-ex-fn :mode :ap}
-            
-            ]
-
 ;                
  }

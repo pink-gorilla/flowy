@@ -3,12 +3,13 @@
         missionary/missionary {:mvn/version "b.47"}
         ring/ring-core {:mvn/version "1.13.0"}
         ring/ring-jetty-adapter {:mvn/version "1.13.0"} ; jetty config
+        babashka/fs {:mvn/version "0.5.24"}
+        tick/tick {:mvn/version "0.6.2"}
         org.pinkgorilla/transit-ajax {:mvn/version "0.1.11"} ; encoding
         org.pinkgorilla/modular {:mvn/version "0.3.77"}  ; modular.writer
         org.pinkgorilla/extension {:mvn/version "0.0.16"} ; extension config
         org.pinkgorilla/id {:mvn/version "0.1.4"} ; human ids (for session)
-        babashka/fs {:mvn/version "0.5.24"}
-        tick/tick {:mvn/version "0.6.2"}
+        org.pinkgorilla/clj-service {:mvn/version "0.7.5"}
         }
 
  :aliases {; github ci  
