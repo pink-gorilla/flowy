@@ -1,8 +1,8 @@
-{:name "flowy"
- ; build
- :lazy false
- :cljs-namespace [flowy.config]
- :cljs-ns-bindings {'flowy.config {'start-flowy-service flowy.config/start-flowy-service}}
+{:module/name :flowy
+ ; build 
+ :cljs/module :main
+ :cljs/namespace [flowy.config]
+ :cljs/ns-bindings {'flowy.config {'start-flowy-service flowy.config/start-flowy-service}}
  ; runtime
  :cljs-service {:config-fn flowy.config/config-flowy ; build flowy config
                 :start-fn flowy.config/start-flowy-service} ; configure flowy

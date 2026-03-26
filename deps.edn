@@ -8,8 +8,8 @@
         org.pinkgorilla/transit-ajax {:mvn/version "0.1.11"} ; encoding
         org.pinkgorilla/modular {:mvn/version "0.3.77"}  ; modular.writer
         org.pinkgorilla/extension {:mvn/version "0.0.16"} ; extension config
-        org.pinkgorilla/id {:mvn/version "0.1.4"} ; human ids (for session)
-        org.pinkgorilla/clj-service {:mvn/version "0.7.5"}
+        org.pinkgorilla/id {:mvn/version "0.2.5"} ; human ids (for session)
+        org.pinkgorilla/clj-service {:mvn/version "0.7.7"}
         }
 
  :aliases {; github ci  

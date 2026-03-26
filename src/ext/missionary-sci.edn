@@ -1,8 +1,9 @@
-{:name "missionary-sci"
+{:extension/name :missionary-sci
  ; build
- :lazy false
- :cljs-namespace [missionary.core
+ :cljs/module :main
+ :cljs/when-defined :sci 
+ :cljs/namespace [missionary.core
                   sci.configs.missionary]
- :cljs-ns-bindings {'missionary.core  sci.configs.missionary/missionary-namespace}
+ :cljs/ns-bindings {'missionary.core  sci.configs.missionary/missionary-namespace}
  
  }
