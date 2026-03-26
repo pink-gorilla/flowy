@@ -1,4 +1,4 @@
-{:module/name :flowy
+{:extension/name :flowy
  ; build 
  :cljs/module :main
  :cljs/define :flowy
