@@ -1,6 +1,7 @@
 {:module/name :flowy
  ; build 
  :cljs/module :main
+ :cljs/define :flowy
  :cljs/namespace [flowy.config]
  :cljs/ns-bindings {'flowy.config {'start-flowy-service flowy.config/start-flowy-service}}
  ; runtime
